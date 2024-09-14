@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/blog_backend
+            cd ~/blog/blog_backend
             git pull
             npm install
             pm2 restart blog_backend
