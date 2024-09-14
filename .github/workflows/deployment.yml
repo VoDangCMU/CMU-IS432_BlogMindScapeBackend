@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/blog_backend
+            cd ~/blog_backend
             git pull
             yarn install
             pm2 restart blog_backend
