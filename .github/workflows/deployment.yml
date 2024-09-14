@@ -10,6 +10,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
       - name: SSH Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -19,5 +25,5 @@ jobs:
           script: |
             cd ~/blog_backend
             git pull
-            yarn install
+            npm install
             pm2 restart blog_backend
