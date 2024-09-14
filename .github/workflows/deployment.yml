@@ -25,5 +25,5 @@ jobs:
           script: |
             cd ~/blog/blog_backend
             git pull
-            npm install
+            yarn install
             pm2 restart blog_backend
