@@ -1,14 +1,27 @@
 import { Router } from "express";
+import { z } from "zod";
+import Post from "../../../database/models/Post";
+import { AppDataSource } from "../../../database/DataSource";
 
 const post = Router();
 
-post.get("/", (req, res) => {
-  let user = {
-    id: 1,
-    name: "Khoa"
-  }
+const postRepository = AppDataSource.getRepository(Post)
 
-  res.status(200).json(user);
+post.get("/:id", async (req, res) => {
+  try {
+    const id = z.string().regex(/^\d+$/).transform(Number).parse(req.params.id);
+    const post = await postRepository.findOne({where: { id: id }})
+  
+    if (post)
+      return res.status(200).json(post);
+    res.status(404).json({
+      message: "Not Found"
+    });
+  } catch(e) {
+    res.status(400).json({
+      message: "Bad Request"
+    })
+  }
 })
 
 export default post;
