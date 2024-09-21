@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, JoinColumn, ManyToMany, JoinTable } from "typeorm"
+import Post from "./Post"
 
 @Entity()
 @Unique('UNIQUE_USERNAME', ['username'])
@@ -21,6 +22,13 @@ export default class User {
 
     @Column()
     password: string
+
+    @OneToMany(() => Post, (post) => post.user, { onDelete: "CASCADE"})
+    posts: Array<Post>
+
+    @ManyToMany(() => Post, (post) => post.upvotedUsers, { onDelete: "CASCADE"})
+    @JoinTable()
+    upvotedPosts: Array<Post>
 }
 
 module.exports = User;
