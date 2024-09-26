@@ -14,7 +14,8 @@ const PasswordlessPost = z.object({
   upvote: CommonSchema.NumberSchema,
   downvote: CommonSchema.NumberSchema,
   user: UserSchema.PasswordlessUserSchema,
-  upvotedUsers: z.array(UserSchema.PasswordlessUserSchema)
+  upvotedUsers: z.array(UserSchema.PasswordlessUserSchema),
+  downvotedUsers: z.array(UserSchema.PasswordlessUserSchema)
 });
 
 const UpdatePostParamsValidator = z.object({

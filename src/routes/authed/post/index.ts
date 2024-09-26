@@ -19,6 +19,7 @@ post.get("/:id", async (req, res) => {
       relations: { 
         user: true,
         upvotedUsers: true,
+        downvotedUsers: true
       }
     })
 
@@ -60,7 +61,7 @@ post.delete("/:id", async (req, res) => {
     if (!deletedPost) return ResponseBuilder.NotFound(res);
 
     // If requested user not the post owner
-    if (deletedPost.user.id != userID) return ResponseBuilder.Forbidden(res);
+    if (deletedPost.user.id != userID) return ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
 
     postRepository.delete(postID);
 
@@ -114,11 +115,43 @@ post.put("/upvote/:id", async (req, res) => {
 
     if (!user) return ResponseBuilder.NotFound(res, "USER");
     if (!existedPost) return ResponseBuilder.NotFound(res, "POST");
-    if (existedPost.user.id != user.id) return ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
     if (existedPost.upvotedUsers.some((e) => e.id == user.id)) return ResponseBuilder.BadRequest(res, "ALREADY_UPVOTED");
 
     existedPost.upvotedUsers.push(user);
     existedPost.upvote++;
+
+    await postRepository.save(existedPost);
+    return ResponseBuilder.Ok(res, PostSchema.PasswordlessPost.parse(existedPost));
+  } catch (e) {
+    return ResponseBuilder.BadRequest(res, e);
+  }
+})
+
+post.put("/downvote/:id", async (req, res) => {
+  try {
+    const postID = CommonSchema.NumberSchema.parse(req.params.id)
+    const userID = parseInt(req.headers['userID'] as string, 10);
+
+    const user = await userRepository.findOne({
+      where: { id: userID }
+    })
+
+    const existedPost = await postRepository.findOne({
+      where: { id: postID },
+      relations: { 
+        user: true,
+        downvotedUsers: true,
+        upvotedUsers: true
+      }
+    })
+
+    if (!user) return ResponseBuilder.NotFound(res, "USER_NOT_FOUND");
+    if (!existedPost) return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
+    if (existedPost.downvotedUsers.some((e) => e.id == user.id)) return ResponseBuilder.BadRequest(res, "ALREADY_DOWNVOTE");
+    if (existedPost.upvotedUsers.some((e) => e.id == user.id)) return ResponseBuilder.BadRequest(res, "ALREADY_UPVOTED");
+
+    existedPost.downvotedUsers.push(user);
+    existedPost.downvote++;
 
     await postRepository.save(existedPost);
     return ResponseBuilder.Ok(res, PostSchema.PasswordlessPost.parse(existedPost));

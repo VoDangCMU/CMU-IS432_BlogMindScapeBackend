@@ -29,6 +29,10 @@ export default class User {
     @ManyToMany(() => Post, (post) => post.upvotedUsers, { onDelete: "CASCADE"})
     @JoinTable()
     upvotedPosts: Array<Post>
+
+    @ManyToMany(() => Post, (post) => post.downvotedUsers, { onDelete: "CASCADE"})
+    @JoinTable()
+    downvotedPosts: Array<Post>
 }
 
 module.exports = User;
