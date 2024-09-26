@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import User from '../database/models/User';
+import CommonSchema from './Common';
 
 const CreatePostDataValidator = z.object({
   title: z.string(),
@@ -21,9 +21,16 @@ const CreatePostResponseValidator = z.object({
   })
 });
 
+const UpdatePostParamsValidator = z.object({
+  id: CommonSchema.NumberSchema,
+  title: z.string().optional(),
+  body: z.string().optional(),
+});
+
 const PostSchema = {
   CreatePostDataValidator,
-  CreatePostResponseValidator
+  CreatePostResponseValidator,
+  UpdatePostParamsValidator
 }
 
 export default PostSchema;

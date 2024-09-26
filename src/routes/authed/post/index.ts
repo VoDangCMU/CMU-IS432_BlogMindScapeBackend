@@ -14,14 +14,14 @@ const post = Router();
 post.get("/:id", async (req, res) => {
   try {
     const id = CommonSchema.NumberSchema.parse(req.params.id);
-    const _post = await postRepository.findOne({ 
+    const existedPost = await postRepository.findOne({ 
       where: { id: id }, 
       relations: { user: true } 
     })
 
-    if (_post)
+    if (existedPost)
       return ResponseBuilder
-        .Ok(res, PostSchema.CreatePostResponseValidator.parse(_post));
+        .Ok(res, PostSchema.CreatePostResponseValidator.parse(existedPost));
     return ResponseBuilder.NotFound(res);
   } catch (e) {
     ResponseBuilder.BadRequest(res, e)
@@ -33,15 +33,15 @@ post.post("/", async (req, res) => {
     const reqBody = PostSchema.CreatePostDataValidator.parse(req.body);
     const userID = parseInt(req.headers['userID'] as string, 10);
     const user = await userRepository.findOne({ where: { id: userID } });
-    let _post = new Post();
+    let createdPost = new Post();
 
-    _post.title = reqBody.title;
-    _post.body = reqBody.body;
-    _post.user = user!;
+    createdPost.title = reqBody.title;
+    createdPost.body = reqBody.body;
+    createdPost.user = user!;
 
-    await postRepository.save(_post);
+    await postRepository.save(createdPost);
 
-    return ResponseBuilder.Ok(res, PostSchema.CreatePostResponseValidator.parse(_post))
+    return ResponseBuilder.Ok(res, PostSchema.CreatePostResponseValidator.parse(createdPost))
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);
   }
@@ -52,16 +52,39 @@ post.delete("/:id", async (req, res) => {
     const postID = CommonSchema.NumberSchema.parse(req.params.id)
     const userID = parseInt(req.headers['userID'] as string, 10);
 
-    const _post = await postRepository.findOne({ where: {id: postID }, relations: {user: true}})
+    const deletedPost = await postRepository.findOne({ where: {id: postID }, relations: {user: true}})
 
-    if (!_post) return ResponseBuilder.NotFound(res);
+    if (!deletedPost) return ResponseBuilder.NotFound(res);
 
     // If requested user not the post owner
-    if (_post.user.id != userID) return ResponseBuilder.Forbidden(res);
+    if (deletedPost.user.id != userID) return ResponseBuilder.Forbidden(res);
 
     postRepository.delete(postID);
 
-    return ResponseBuilder.Ok(res, _post);
+    return ResponseBuilder.Ok(res, deletedPost);
+  } catch (e) {
+    return ResponseBuilder.BadRequest(res, e);
+  }
+})
+
+post.put("/", async (req, res) => {
+  try {
+    const reqBody = PostSchema.UpdatePostParamsValidator.parse(req.body);
+
+    const existedPost = postRepository.findOne({
+      where: { id: reqBody.id }
+    });
+
+    if (!existedPost) ResponseBuilder.NotFound(res)
+
+    await postRepository.save(reqBody)
+
+    const updatedPost = await postRepository.findOne({
+      where: { id: reqBody.id },
+      relations: { user: true }
+    })
+
+    return ResponseBuilder.Ok(res, PostSchema.CreatePostResponseValidator.parse(updatedPost!));
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);
   }
