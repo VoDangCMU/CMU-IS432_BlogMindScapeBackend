@@ -18,9 +18,7 @@ post.get("/:id", async (req, res) => {
       message: "Not Found"
     });
   } catch(e) {
-    res.status(400).json({
-      message: "Bad Request"
-    })
+    res.status(400).json(e)
   }
 })
 

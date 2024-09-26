@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { CookieOptions, Router } from "express";
 import User from "../../../database/models/User";
 import { AppDataSource } from "../../../database/DataSource";
 import UserSchema from "../../../schemas/UserSchema";
@@ -38,20 +38,21 @@ auth.post("/login", async (req, res) => {
   
         let expiresDate = new Date();
         expiresDate.setDate(expiresDate.getDate() + 7);
-  
-        console.log(reqBody)
+
+        const cookieOps: CookieOptions = {
+          expires: (reqBody.keepLogin ? expiresDate: undefined),
+          sameSite: "lax"
+        }
   
         return res
-          .cookie('jwt', token, {
-            expires: (reqBody.keepLogin ? expiresDate: undefined),
-            sameSite: "lax"
-          })
+          .cookie('jwt', token, cookieOps)
           .status(200)
-          .json({
-            token
-          })
+          .json({ token })
       }
-    } else return res.status(404).json(user);
+    }
+    return res.status(404).json({
+      message: "Could not find user or wrong password"
+    });
   } catch (e) {
     res.status(400).send(e);
   }
