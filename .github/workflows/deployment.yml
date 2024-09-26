@@ -13,12 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup yarn
-        run: npm install -g yarn
-
-      - name: Install dependencies
-        run: yarn install
-
       - name: SSH Deploy
         uses: appleboy/ssh-action@master
         with:

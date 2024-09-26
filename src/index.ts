@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { AppDataSource } from "./database/DataSource";
 import { isAuth } from "./middlewares/isAuth";
-import auth from "./routes/public/auth";
+import env from "./env";
 
 const app = express();
 
@@ -31,8 +31,8 @@ AppDataSource.initialize()
     app.use(`/${router}`, req_router);
   }
 
-  app.use("/auth", auth);
-
+  app.use(isAuth);
+  
   // Authed router
   const authedRouterPath = path.resolve(__dirname, "routes", "authed");
   const authedRouter: Array<string> = fs.readdirSync(authedRouterPath);
@@ -42,7 +42,7 @@ AppDataSource.initialize()
       app.use(`/${router}`, req_router);
   }
   
-  app.listen(4000, () => {
-    console.log("Running");
+  app.listen(env.APPLICATION_PORT, () => {
+    console.log(`Application Start at PORT ${env.APPLICATION_PORT}\nENV=${env.ENV}`);
   })
 })
