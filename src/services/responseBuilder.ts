@@ -13,7 +13,7 @@ function BadRequest(res: Response, detail: any = "") {
   return res
     .status(400)
     .json({
-      message: "The content you requested is missing.",
+      message: "Bad Request.",
       detail
     })
 }
