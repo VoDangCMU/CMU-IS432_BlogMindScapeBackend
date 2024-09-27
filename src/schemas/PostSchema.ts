@@ -1,10 +1,10 @@
-import { z } from 'zod';
-import CommonSchema from './Common';
-import UserSchema from './UserSchema';
+import { z } from "zod";
+import CommonSchema from "./Common";
+import UserSchema from "./UserSchema";
 
 const CreatePostDataValidator = z.object({
   title: z.string(),
-  body: z.string()
+  body: z.string(),
 });
 
 const PasswordlessPost = z.object({
@@ -13,9 +13,9 @@ const PasswordlessPost = z.object({
   body: z.string(),
   upvote: CommonSchema.NumberSchema,
   downvote: CommonSchema.NumberSchema,
-  user: UserSchema.PasswordlessUserSchema,
-  upvotedUsers: z.array(UserSchema.PasswordlessUserSchema),
-  downvotedUsers: z.array(UserSchema.PasswordlessUserSchema)
+  user: UserSchema.PasswordlessUserSchema.optional(),
+  upvotedUsers: z.array(UserSchema.PasswordlessUserSchema).optional(),
+  downvotedUsers: z.array(UserSchema.PasswordlessUserSchema).optional(),
 });
 
 const UpdatePostParamsValidator = z.object({
@@ -27,8 +27,8 @@ const UpdatePostParamsValidator = z.object({
 const PostSchema = {
   CreatePostDataValidator,
   PasswordlessPost,
-  UpdatePostParamsValidator
-}
+  UpdatePostParamsValidator,
+};
 
 export default PostSchema;
 module.exports = PostSchema;

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import CommonSchema from './Common';
+import { z } from "zod";
+import CommonSchema from "./Common";
 
 const FullUserSchema = z.object({
   id: CommonSchema.NumberSchema,
@@ -8,7 +8,7 @@ const FullUserSchema = z.object({
   fullname: z.string(),
   dateOfBirth: CommonSchema.DateSchema,
   password: z.string(),
-})
+});
 
 const PasswordlessUserSchema = z.object({
   id: CommonSchema.NumberSchema,
@@ -16,19 +16,19 @@ const PasswordlessUserSchema = z.object({
   mail: z.string().email(),
   fullname: z.string(),
   dateOfBirth: CommonSchema.DateSchema,
-})
+});
 
 const UserLoginCredentialSchema = z.object({
   username: z.string(),
   password: z.string(),
-  keepLogin: z.enum(['true', 'false']).transform((value) => value === 'true')
+  keepLogin: z.enum(["true", "false"]).transform((value) => value === "true"),
 });
 
 const UserSchema = {
   FullUserSchema,
   UserLoginCredentialSchema,
-  PasswordlessUserSchema
-}
+  PasswordlessUserSchema,
+};
 
 export default UserSchema;
 module.exports = UserSchema;
