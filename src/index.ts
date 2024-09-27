@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { AppDataSource } from "./database/DataSource";
 import { isAuth } from "./middlewares/isAuth";
 import env from "./env";
+import notfound from "./routes/[404]";
 
 const app = express();
 
@@ -41,6 +42,9 @@ AppDataSource.initialize()
       const req_router = require(`./routes/authed/${router}/index`)
       app.use(`/${router}`, req_router);
   }
+
+  // 404
+  app.use("*", notfound);
   
   app.listen(env.APPLICATION_PORT, () => {
     console.log(`Application Start at PORT ${env.APPLICATION_PORT}\nENV=${env.ENV}`);
