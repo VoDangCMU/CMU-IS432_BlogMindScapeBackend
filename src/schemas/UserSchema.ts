@@ -2,7 +2,7 @@ import { z } from "zod";
 import CommonSchema from "./Common";
 
 const FullUserSchema = z.object({
-  id: CommonSchema.NumberSchema,
+  id: CommonSchema.NumberSchema.optional(),
   username: z.string(),
   mail: z.string().email(),
   fullname: z.string(),
@@ -11,7 +11,7 @@ const FullUserSchema = z.object({
 });
 
 const PasswordlessUserSchema = z.object({
-  id: CommonSchema.NumberSchema,
+  id: CommonSchema.NumberSchema.optional(),
   username: z.string(),
   mail: z.string().email(),
   fullname: z.string(),
