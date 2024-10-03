@@ -25,7 +25,7 @@ const envSchema = z.object({
   DB_PASSWORD: z.string(),
   DB_DATABASE: z.string(),
   SALT_ROUND: z.string().regex(/^\d+$/).transform(Number),
-  APPLICATION_PORT: CommonSchema.NumberSchema.optional()
+  APPLICATION_PORT: CommonSchema.NUMBER.optional()
 })
 
 const env = envSchema.parse(process.env)

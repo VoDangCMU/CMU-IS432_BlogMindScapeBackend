@@ -8,7 +8,7 @@ const postRepository = AppDataSource.getRepository(Post);
 
 export default async function deletePost(req: Request, res: Response) {
   try {
-    const postID = CommonSchema.NumberSchema.parse(req.params.id);
+    const postID = CommonSchema.NUMBER.parse(req.params.id);
     const userID = parseInt(req.headers["userID"] as string, 10);
 
     const deletedPost = await postRepository.findOne({

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const NumberSchema = z.union([
+const NUMBER = z.union([
   z.string().regex(/^\d+$/).transform(Number),
   z.number()
 ]) 
@@ -11,7 +11,7 @@ const DateSchema = z.union([
 ]) 
 
 const CommonSchema = {
-  NumberSchema,
+  NUMBER,
   DateSchema
 }
 export default CommonSchema;

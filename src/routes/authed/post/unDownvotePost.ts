@@ -10,7 +10,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export default async function unDownvotePost(req: Request, res: Response) {
   try {
-    const postID = CommonSchema.NumberSchema.parse(req.params.id);
+    const postID = CommonSchema.NUMBER.parse(req.params.id);
     const userID = parseInt(req.headers["userID"] as string, 10);
 
     const user = await userRepository.findOne({
@@ -39,7 +39,7 @@ export default async function unDownvotePost(req: Request, res: Response) {
     await postRepository.save(existedPost);
     return ResponseBuilder.Ok(
       res,
-      PostSchema.PasswordlessPost.parse(existedPost)
+      PostSchema.GET.parse(existedPost)
     );
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);
