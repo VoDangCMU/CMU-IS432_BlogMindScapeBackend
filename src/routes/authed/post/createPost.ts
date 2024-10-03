@@ -10,7 +10,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export default async function createPost(req: Request, res: Response) {
   try {
-    const reqBody = PostSchema.CreatePostDataValidator.parse(req.body);
+    const reqBody = PostSchema.CREATE.parse(req.body);
     const userID = parseInt(req.headers["userID"] as string, 10);
     const user = await userRepository.findOne({ where: { id: userID } });
     let createdPost = new Post();
@@ -23,7 +23,7 @@ export default async function createPost(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      PostSchema.PasswordlessPost.parse(createdPost)
+      PostSchema.GET.parse(createdPost)
     );
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);

@@ -8,7 +8,7 @@ const postRepository = AppDataSource.getRepository(Post);
 
 export default async function updatePost(req: Request, res: Response) {
   try {
-    const reqBody = PostSchema.UpdatePostParamsValidator.parse(req.body);
+    const reqBody = PostSchema.UPDATE.parse(req.body);
     const userID = parseInt(req.headers["userID"] as string, 10);
 
     const existedPost = await postRepository.findOne({
@@ -27,7 +27,7 @@ export default async function updatePost(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      PostSchema.PasswordlessPost.parse(updatedPost!)
+      PostSchema.GET.parse(updatedPost!)
     );
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);

@@ -12,7 +12,7 @@ const userRepository = AppDataSource.getRepository(User)
 
 auth.post("/register", async (req, res) => {
   try {
-    const reqBody = UserSchema.FullUserSchema.parse(req.body);
+    const reqBody = UserSchema.FULL.parse(req.body);
     let user = new User();
 
     user.dateOfBirth = new Date(reqBody.dateOfBirth);
@@ -22,13 +22,13 @@ auth.post("/register", async (req, res) => {
     user.password = hash(reqBody.password);
 
     await userRepository.save(user);
-    return ResponseBuilder.Ok(res, UserSchema.PasswordlessUserSchema.parse(user));
+    return ResponseBuilder.Ok(res, UserSchema.PASSLESS.parse(user));
   } catch (e) { return ResponseBuilder.BadRequest(res, e); }
 })
 
 auth.post("/login", async (req, res) => {
   try {
-    const reqBody = UserSchema.UserLoginCredentialSchema.parse(req.body);
+    const reqBody = UserSchema.LOGIN_PARAMS.parse(req.body);
     const user = await userRepository.findOne({ where: { username: reqBody.username } });
 
     if (user) {
