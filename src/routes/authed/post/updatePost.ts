@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { PostSchema } from "../../../schemas";
-import ResponseBuilder from "../../../services/responseBuilder";
-import { AppDataSource, Models } from "../../../database";
+import ResponseBuilder from "@services/responseBuilder";
+import { AppDataSource, Models } from "@database/index";
+import PostSchema from "@schemas/PostSchema";
 
 const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function updatePost(req: Request, res: Response) {
   try {
-    const reqBody = PostSchema.UPDATE.parse(req.body);
+    const reqBody = PostSchema.UpdateSchema.parse(req.body);
     const userID = parseInt(req.headers["userID"] as string, 10);
 
     const existedPost = await postRepository.findOne({
@@ -27,7 +27,7 @@ export default async function updatePost(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      PostSchema.GET.parse(updatedPost!)
+      PostSchema.ResponseSchema.parse(updatedPost!)
     );
   } catch (e) {
     return ResponseBuilder.BadRequest(res, e);

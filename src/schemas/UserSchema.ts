@@ -1,34 +1,32 @@
 import { z } from "zod";
-import CommonSchema from "./Common";
+import { BOOLEAN, DATE, MAIL, NUMBER, STRING } from "./Schemas";
 
-const FULL = z.object({
-  id: CommonSchema.NUMBER.optional(),
-  username: z.string(),
-  mail: z.string().email(),
-  fullname: z.string(),
-  dateOfBirth: CommonSchema.DateSchema,
-  password: z.string(),
+const BASE_USER = {
+  id: NUMBER.optional(),
+  username: STRING,
+  mail: MAIL,
+  dateOfBirth: DATE,
+  fullname: STRING
+}
+
+const CreateSchema = z.object({
+  ...BASE_USER,
+  password: STRING,
 });
 
-const PASSLESS = z.object({
-  id: CommonSchema.NUMBER.optional(),
-  username: z.string(),
-  mail: z.string().email(),
-  fullname: z.string(),
-  dateOfBirth: CommonSchema.DateSchema,
-});
+const ResponseSchema = z.object(BASE_USER);
 
-const LOGIN_PARAMS = z.object({
+const LoginParamsSchema = z.object({
   username: z.string(),
   password: z.string(),
-  keepLogin: z.enum(["true", "false"]).transform((value) => value === "true"),
+  keepLogin: BOOLEAN,
 });
 
-const UserSchema = {
-  FULL,
-  LOGIN_PARAMS,
-  PASSLESS,
+const UserParser = {
+  CreateSchema,
+  ResponseSchema,
+  LoginParamsSchema
 };
 
-export default UserSchema;
-module.exports = UserSchema;
+export default UserParser;
+module.exports = UserParser;

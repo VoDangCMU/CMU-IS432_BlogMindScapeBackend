@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { PostSchema } from "../../../schemas";
-import { AppDataSource, Models } from "../../../database";
-import ResponseBuilder from "../../../services/responseBuilder";
+import { AppDataSource, Models } from "@database/index";
+import ResponseBuilder from "@services/responseBuilder";
+import PostSchema from "@schemas/PostSchema";
+import log from "@services/logger";
 
 const User = Models.User;
 const Post = Models.Post;
@@ -10,7 +11,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export default async function createPost(req: Request, res: Response) {
   try {
-    const reqBody = PostSchema.CREATE.parse(req.body);
+    const reqBody = PostSchema.CreateSchema.parse(req.body);
     const userID = parseInt(req.headers["userID"] as string, 10);
     const user = await userRepository.findOne({ where: { id: userID } });
     let createdPost = new Post();
@@ -21,11 +22,14 @@ export default async function createPost(req: Request, res: Response) {
 
     await postRepository.save(createdPost);
 
+    log("info", "POST CREATED", createdPost);
+
     return ResponseBuilder.Ok(
       res,
-      PostSchema.GET.parse(createdPost)
+      PostSchema.ResponseSchema.parse(createdPost)
     );
   } catch (e) {
+    log('warn', e);
     return ResponseBuilder.BadRequest(res, e);
   }
 }

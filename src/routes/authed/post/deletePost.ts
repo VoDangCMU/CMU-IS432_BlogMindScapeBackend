@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { CommonSchema } from "../../../schemas";
-import ResponseBuilder from "../../../services/responseBuilder";
-import { AppDataSource, Models } from "../../../database";
+import ResponseBuilder from "@services/responseBuilder";
+import { AppDataSource, Models } from "@database/index";
+import C from "@schemas/Schemas";
 
 const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function deletePost(req: Request, res: Response) {
   try {
-    const postID = CommonSchema.NUMBER.parse(req.params.id);
-    const userID = parseInt(req.headers["userID"] as string, 10);
+    const postID = C.NUMBER.parse(req.params.id);
+    const userID = C.NUMBER.parse(req.headers["userID"]);
 
     const deletedPost = await postRepository.findOne({
       where: { id: postID },
