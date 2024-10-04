@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { NUMBER, STRING, URL } from "./Schemas";
+import { DATE, NUMBER, STRING, URL } from "./Schemas";
 import UserSchema from "./UserSchema";
 
 export const CreateSchema = z.object({
@@ -13,6 +13,7 @@ export const ResponseSchema = z.object({
   id: NUMBER.optional(),
   body: STRING,
   attachment: URL.nullable().optional(),
+  issueAt: DATE,
   user: UserSchema.ResponseSchema.optional()
 });
 
