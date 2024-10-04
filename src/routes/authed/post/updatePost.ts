@@ -1,22 +1,32 @@
 import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import { AppDataSource, Models } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import PostSchema from "@schemas/PostSchema";
+import Post from "@database/models/Post";
+import C from "@schemas/Schemas";
+import log from "@services/logger";
 
-const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function updatePost(req: Request, res: Response) {
-  try {
-    const reqBody = PostSchema.UpdateSchema.parse(req.body);
-    const userID = parseInt(req.headers["userID"] as string, 10);
+  let reqBody, userID;
 
+  try {
+    reqBody = PostSchema.UpdateSchema.parse(req.body);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
+
+  try {
     const existedPost = await postRepository.findOne({
       where: { id: reqBody.id },
     });
 
     if (!existedPost) ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
-    if (existedPost?.user.id != userID) ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
+    if (existedPost?.user.id != userID)
+      ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
 
     await postRepository.save(reqBody);
 
@@ -30,6 +40,7 @@ export default async function updatePost(req: Request, res: Response) {
       PostSchema.ResponseSchema.parse(updatedPost!)
     );
   } catch (e) {
-    return ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res, e);
   }
 }

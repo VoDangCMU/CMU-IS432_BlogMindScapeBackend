@@ -10,8 +10,8 @@ import {
   JoinTable,
   OneToMany,
 } from "typeorm";
-import User from "./User";
-import Comment from "./Comment";
+import User from "@models/User";
+import Comment from "@models/Comment";
 
 @Entity()
 export default class Post {
@@ -44,5 +44,3 @@ export default class Post {
   @OneToMany(() => Comment, (comment) => comment.post, { onDelete: "CASCADE" })
   comments: Array<Comment>;
 }
-
-module.exports = Post;

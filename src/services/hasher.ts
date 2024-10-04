@@ -8,4 +8,4 @@ export function hash(x: string): string {
 
 export function compare(text: string, digest: string): boolean {
   return compareSync(text, digest);
-} 
+}

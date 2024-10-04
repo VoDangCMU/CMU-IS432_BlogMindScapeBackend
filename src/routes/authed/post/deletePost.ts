@@ -1,12 +1,23 @@
 import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import { AppDataSource, Models } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import C from "@schemas/Schemas";
+import Post from "@database/models/Post";
+import log from "@services/logger";
 
-const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function deletePost(req: Request, res: Response) {
+  let postID, userID;
+
+  try {
+    postID = C.NUMBER.parse(req.params.id);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
+
   try {
     const postID = C.NUMBER.parse(req.params.id);
     const userID = C.NUMBER.parse(req.headers["userID"]);
@@ -25,6 +36,7 @@ export default async function deletePost(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(res, deletedPost);
   } catch (e) {
-    return ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res, e);
   }
 }

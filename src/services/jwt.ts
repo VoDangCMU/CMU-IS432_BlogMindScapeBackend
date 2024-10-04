@@ -1,14 +1,14 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-import env from '../env';
+import env from "../env";
 
 const tokenOptions: jwt.SignOptions = {
   algorithm: "HS256",
-  expiresIn: "7d"
-}
+  expiresIn: "7d",
+};
 
 export function signToken(userID: string): string {
-  const token = jwt.sign({userID}, env.TOKEN_SECRET, tokenOptions)
+  const token = jwt.sign({ userID }, env.TOKEN_SECRET, tokenOptions);
 
   return token;
 }

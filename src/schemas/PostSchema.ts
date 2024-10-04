@@ -3,25 +3,24 @@ import { NUMBER, STRING } from "./Schemas";
 import UserSchema from "./UserSchema";
 import CommentSchema from "./CommentSchema";
 
-const BASE_POST = {
-  id: NUMBER,
+const BASE_POST = z.object({
+  id: NUMBER.optional(),
   title: STRING,
   body: STRING,
   upvote: NUMBER,
   downvote: NUMBER,
-}
+});
 
 const CreateSchema = z.object({
   title: STRING,
   body: STRING,
 });
 
-const ResponseSchema = z.object({
-  ...BASE_POST,
+const ResponseSchema = BASE_POST.extend({
   user: UserSchema.ResponseSchema.optional(),
   upvotedUsers: z.array(UserSchema.ResponseSchema).optional(),
   downvotedUsers: z.array(UserSchema.ResponseSchema).optional(),
-  comments: z.array(CommentSchema.ResponseSchema).optional()
+  comments: z.array(CommentSchema.ResponseSchema).optional(),
 });
 
 const UpdateSchema = z.object({

@@ -1,19 +1,27 @@
 import { Request, Response } from "express";
-import { AppDataSource, Models } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@schemas/Schemas";
 import PostSchema from "@schemas/PostSchema";
+import Post from "@database/models/Post";
+import User from "@database/models/User";
+import log from "@services/logger";
 
-const User = Models.User;
-const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 const userRepository = AppDataSource.getRepository(User);
 
 export default async function unDownvotePost(req: Request, res: Response) {
-  try {
-    const postID = C.NUMBER.parse(req.params.id);
-    const userID = parseInt(req.headers["userID"] as string, 10);
+  let postID, userID;
 
+  try {
+    postID = C.NUMBER.parse(req.params.id);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
+  
+  try {
     const user = await userRepository.findOne({
       where: { id: userID },
     });
@@ -43,6 +51,7 @@ export default async function unDownvotePost(req: Request, res: Response) {
       PostSchema.ResponseSchema.parse(existedPost)
     );
   } catch (e) {
-    return ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res, e);
   }
 }

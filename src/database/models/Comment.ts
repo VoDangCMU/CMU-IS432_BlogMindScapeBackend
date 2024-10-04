@@ -2,17 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
-  Unique,
-  OneToMany,
-  JoinColumn,
-  ManyToMany,
-  JoinTable,
   ManyToOne,
   CreateDateColumn,
 } from "typeorm";
-import Post from "./Post";
-import User from "./User";
+import Post from "@models/Post";
+import User from "@models/User";
 
 @Entity()
 export default class Comment {
@@ -34,5 +28,3 @@ export default class Comment {
   @ManyToOne(() => Post, { onDelete: "CASCADE" })
   post: Post;
 }
-
-module.exports = Comment;

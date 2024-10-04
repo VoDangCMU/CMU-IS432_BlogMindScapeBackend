@@ -6,7 +6,7 @@ export const CreateSchema = z.object({
   id: NUMBER.optional(),
   body: STRING.min(10),
   attachment: STRING.url().nullable().optional(),
-  postID: NUMBER
+  postID: NUMBER,
 });
 
 export const ResponseSchema = z.object({
@@ -14,7 +14,7 @@ export const ResponseSchema = z.object({
   body: STRING,
   attachment: URL.nullable().optional(),
   issueAt: DATE,
-  user: UserSchema.ResponseSchema.optional()
+  user: UserSchema.ResponseSchema.optional(),
 });
 
 export const UpdateSchema = z.object({
@@ -26,7 +26,7 @@ export const UpdateSchema = z.object({
 const CommentSchema = {
   CreateSchema,
   ResponseSchema,
-  UpdateSchema
+  UpdateSchema,
 };
 
 export default CommentSchema;
