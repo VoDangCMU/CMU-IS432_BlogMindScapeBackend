@@ -3,6 +3,7 @@ import { Models, AppDataSource } from "@database/index";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@schemas/Schemas";
 import PostSchema from "@schemas/PostSchema";
+import log from "@services/logger";
 
 const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
@@ -22,6 +23,8 @@ export default async function getPostByID(req: Request, res: Response) {
       },
     });
 
+    log('info', existedPost);
+
     if (existedPost)
       return ResponseBuilder.Ok(
         res,
@@ -29,6 +32,7 @@ export default async function getPostByID(req: Request, res: Response) {
       );
     return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
   } catch (e) {
+    log('warn', e)
     ResponseBuilder.BadRequest(res, e);
   }
 }
