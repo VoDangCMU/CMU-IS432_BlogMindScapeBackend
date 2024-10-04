@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ResponseBuilder from "../services/responseBuilder";
+import ResponseBuilder from "@services/responseBuilder";
 
 const notfound = Router();
 

@@ -1,10 +1,11 @@
 import { CookieOptions, Router } from "express";
-import User from "../../../database/models/User";
-import { AppDataSource } from "../../../database/DataSource";
-import UserSchema from "../../../schemas/UserSchema";
-import { signToken } from "../../../services/jwt";
-import { compare, hash } from "../../../services/hasher";
-import ResponseBuilder from "../../../services/responseBuilder";
+import User from "@database/models/User";
+import { AppDataSource } from "@database/DataSource";
+import UserSchema from "@schemas/UserSchema";
+import { signToken } from "@services/jwt";
+import { compare, hash } from "@services/hasher";
+import ResponseBuilder from "@services/responseBuilder";
+import log from "@services/logger";
 
 const auth = Router();
 
@@ -12,7 +13,7 @@ const userRepository = AppDataSource.getRepository(User)
 
 auth.post("/register", async (req, res) => {
   try {
-    const reqBody = UserSchema.FULL.parse(req.body);
+    const reqBody = UserSchema.CreateSchema.parse(req.body);
     let user = new User();
 
     user.dateOfBirth = new Date(reqBody.dateOfBirth);
@@ -22,13 +23,16 @@ auth.post("/register", async (req, res) => {
     user.password = hash(reqBody.password);
 
     await userRepository.save(user);
-    return ResponseBuilder.Ok(res, UserSchema.PASSLESS.parse(user));
-  } catch (e) { return ResponseBuilder.BadRequest(res, e); }
+    return ResponseBuilder.Ok(res, UserSchema.ResponseSchema.parse(user));
+  } catch (e) { 
+    log('warn', e);
+    return ResponseBuilder.BadRequest(res, e); 
+  }
 })
 
 auth.post("/login", async (req, res) => {
   try {
-    const reqBody = UserSchema.LOGIN_PARAMS.parse(req.body);
+    const reqBody = UserSchema.LoginParamsSchema.parse(req.body);
     const user = await userRepository.findOne({ where: { username: reqBody.username } });
 
     if (user) {
@@ -50,7 +54,10 @@ auth.post("/login", async (req, res) => {
       }
     }
     return ResponseBuilder.NotFound(res, "Could not find user or wrong password")
-  } catch (e) { return ResponseBuilder.BadRequest(res, e); }
+  } catch (e) { 
+    log('warn', e);
+    return ResponseBuilder.BadRequest(res, e); 
+  }
 })
 
 export default auth;

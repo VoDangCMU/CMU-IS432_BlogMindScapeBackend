@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { config } from 'dotenv'
-import { CommonSchema } from './schemas';
+import C, { NUMBER, STRING } from './schemas/Schemas';
 
 config();
 
@@ -11,7 +11,7 @@ const portPerEnv = {
 }
 
 const envSchema = z.object({
-  TOKEN_SECRET: z.string(),
+  TOKEN_SECRET: STRING,
   ENV: z
     .union([
       z.literal('development'),
@@ -19,13 +19,13 @@ const envSchema = z.object({
       z.literal('production'),
     ])
     .default('development'),
-  DB_HOST: z.string().ip(),
-  DB_PORT: z.string().regex(/^\d+$/).transform(Number),
-  DB_USERNAME: z.string(),
-  DB_PASSWORD: z.string(),
-  DB_DATABASE: z.string(),
-  SALT_ROUND: z.string().regex(/^\d+$/).transform(Number),
-  APPLICATION_PORT: CommonSchema.NUMBER.optional()
+  DB_HOST: STRING.ip(),
+  DB_PORT: NUMBER,
+  DB_USERNAME: STRING,
+  DB_PASSWORD: STRING,
+  DB_DATABASE: STRING,
+  SALT_ROUND: NUMBER,
+  APPLICATION_PORT: C.NUMBER.optional()
 })
 
 const env = envSchema.parse(process.env)

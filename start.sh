@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export ENV=production
+npm i -g yarn
+npm i -g ts-node
 yarn install
-npx tsc -p tsconfig.json
-
-node ./dist/index.js
+yarn start

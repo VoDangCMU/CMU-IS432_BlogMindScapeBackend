@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { decodeToken } from "../services/jwt";
-import ResponseBuilder from "../services/responseBuilder";
+import { decodeToken } from "@services/jwt";
+import ResponseBuilder from "@services/responseBuilder";
 
 export function isAuth(req: Request, res: Response, next: NextFunction) {
   if (req.cookies || req.headers.authorization) {

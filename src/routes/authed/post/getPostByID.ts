@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
-import { Models, AppDataSource } from "../../../database";
-import { PostSchema, CommonSchema } from "../../../schemas";
-import ResponseBuilder from "../../../services/responseBuilder";
+import { Models, AppDataSource } from "@database/index";
+import ResponseBuilder from "@services/responseBuilder";
+import C from "@schemas/Schemas";
+import PostSchema from "@schemas/PostSchema";
 
 const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function getPostByID(req: Request, res: Response) {
   try {
-    const id = CommonSchema.NUMBER.parse(req.params.id);
+    const id = C.NUMBER.parse(req.params.id);
     const existedPost = await postRepository.findOne({
       where: { id: id },
       relations: {
@@ -24,7 +25,7 @@ export default async function getPostByID(req: Request, res: Response) {
     if (existedPost)
       return ResponseBuilder.Ok(
         res,
-        PostSchema.GET.parse(existedPost)
+        PostSchema.ResponseSchema.parse(existedPost)
       );
     return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
   } catch (e) {
