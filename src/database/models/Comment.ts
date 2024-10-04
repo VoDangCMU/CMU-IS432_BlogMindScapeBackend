@@ -9,6 +9,7 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  CreateDateColumn,
 } from "typeorm";
 import Post from "./Post";
 import User from "./User";
@@ -24,7 +25,7 @@ export default class Comment {
   @Column({ nullable: true })
   attachment: string;
 
-  @Column({ default: new Date() })
+  @CreateDateColumn()
   issueAt: Date;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
