@@ -7,8 +7,8 @@ const comment = Router();
 
 export default comment;
 
-comment.post('/', createComment);
-comment.put('/', updateComment);
-comment.delete('/:id', deleteComment);
+comment.post("/", createComment);
+comment.put("/", updateComment);
+comment.delete("/:id", deleteComment);
 
 module.exports = comment;

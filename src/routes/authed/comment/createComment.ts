@@ -1,22 +1,29 @@
 import { Request, Response } from "express";
-import { Models, AppDataSource } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import CommentSchema from "@schemas/CommentSchema";
 import C from "@schemas/Schemas";
 import log from "@services/logger";
+import Post from "@database/models/Post";
+import User from "@database/models/User";
+import Comment from "@database/models/Comment";
 
-const User = Models.User;
-const Post = Models.Post;
-const Comment = Models.Comment;
 const postRepository = AppDataSource.getRepository(Post);
 const userRepository = AppDataSource.getRepository(User);
 const commentRepository = AppDataSource.getRepository(Comment);
 
 export default async function createComment(req: Request, res: Response) {
-  try {
-    const reqBody = CommentSchema.CreateSchema.parse(req.body);
-    const userID = C.NUMBER.parse(req.headers["userID"]);
+  let reqBody, userID;
 
+  try {
+    reqBody = CommentSchema.CreateSchema.parse(req.body);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
+
+  try {
     const user = await userRepository.findOne({ where: { id: userID } });
     const post = await postRepository.findOne({
       where: { id: reqBody.postID },
@@ -36,9 +43,12 @@ export default async function createComment(req: Request, res: Response) {
 
     log("info", createdComment);
 
-    return ResponseBuilder.Ok(res, CommentSchema.ResponseSchema.parse(createdComment));
+    return ResponseBuilder.Ok(
+      res,
+      CommentSchema.ResponseSchema.parse(createdComment)
+    );
   } catch (e) {
-    log("warn", e);
-    return ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res);
   }
 }

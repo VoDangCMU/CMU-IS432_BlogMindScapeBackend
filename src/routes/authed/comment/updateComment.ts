@@ -1,45 +1,59 @@
 import { Request, Response } from "express";
-import { Models, AppDataSource } from "../../../database";
+import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import CommentSchema from "@schemas/CommentSchema";
 import C from "@schemas/Schemas";
 import log from "@services/logger";
+import Comment from "@database/models/Comment";
 
-const Comment = Models.Comment;
 const commentRepository = AppDataSource.getRepository(Comment);
 
 export default async function updateComment(req: Request, res: Response) {
-  try {
-    const reqBody = CommentSchema.UpdateSchema.parse(req.body);
-    const userID = C.NUMBER.parse(req.headers["userID"]);
-  
-    log('info', reqBody)
+  let reqBody, userID;
 
+  try {
+    reqBody = CommentSchema.UpdateSchema.parse(req.body);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
+
+  try {
+    log("info", reqBody);
     const existedComment = await commentRepository.findOne({
       where: {
-        id: reqBody.id
+        id: reqBody.id,
       },
       relations: {
         user: true,
         post: {
-          user: true
-        }
-      }
-    })
+          user: true,
+        },
+      },
+    });
 
-    log('info', existedComment)
-  
-    if (!existedComment) return ResponseBuilder.NotFound(res, "COMMENT_NOT_FOUND");
-    if (existedComment.user.id != userID) 
-      return ResponseBuilder.Forbidden(res, "NOT_OWN_COMMENT")
+    log("info", existedComment);
+
+    if (!existedComment)
+      return ResponseBuilder.NotFound(res, "COMMENT_NOT_FOUND");
+    if (existedComment.user.id != userID)
+      return ResponseBuilder.Forbidden(res, "NOT_OWN_COMMENT");
 
     await commentRepository.update(reqBody.id, reqBody);
 
-    const updatedComment = await commentRepository.findOne({ where: { id: reqBody.id }});
-    log('info', existedComment, updatedComment);
-    return ResponseBuilder.Ok(res, CommentSchema.ResponseSchema.parse(updatedComment));
-  } catch(e) {
-    log('warn', e)
-    return ResponseBuilder.BadRequest(res, e);
+    const updatedComment = await commentRepository.findOne({
+      where: { id: reqBody.id },
+    });
+
+    log("info", existedComment, updatedComment);
+
+    return ResponseBuilder.Ok(
+      res,
+      CommentSchema.ResponseSchema.parse(updatedComment)
+    );
+  } catch (e) {
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res);
   }
 }

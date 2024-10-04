@@ -1,20 +1,19 @@
 import { z } from "zod";
 import { BOOLEAN, DATE, MAIL, NUMBER, STRING } from "./Schemas";
 
-const BASE_USER = {
+const BASE_USER = z.object({
   id: NUMBER.optional(),
   username: STRING,
   mail: MAIL,
   dateOfBirth: DATE,
-  fullname: STRING
-}
+  fullname: STRING,
+});
 
-const CreateSchema = z.object({
-  ...BASE_USER,
+const CreateSchema = BASE_USER.extend({
   password: STRING,
 });
 
-const ResponseSchema = z.object(BASE_USER);
+const ResponseSchema = BASE_USER;
 
 const LoginParamsSchema = z.object({
   username: z.string(),
@@ -25,7 +24,7 @@ const LoginParamsSchema = z.object({
 const UserParser = {
   CreateSchema,
   ResponseSchema,
-  LoginParamsSchema
+  LoginParamsSchema,
 };
 
 export default UserParser;

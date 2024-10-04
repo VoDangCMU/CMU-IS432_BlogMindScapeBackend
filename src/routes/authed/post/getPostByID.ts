@@ -1,29 +1,35 @@
 import { Request, Response } from "express";
-import { Models, AppDataSource } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@schemas/Schemas";
 import PostSchema from "@schemas/PostSchema";
 import log from "@services/logger";
+import Post from "@database/models/Post";
 
-const Post = Models.Post;
 const postRepository = AppDataSource.getRepository(Post);
 
 export default async function getPostByID(req: Request, res: Response) {
+  let postID;
   try {
-    const id = C.NUMBER.parse(req.params.id);
+    postID = C.NUMBER.parse(req.params.id);
+  } catch (e) {
+    log("warn", e);
+    ResponseBuilder.BadRequest(res, e);
+  }
+  try {
     const existedPost = await postRepository.findOne({
-      where: { id: id },
+      where: { id: postID },
       relations: {
         user: true,
         upvotedUsers: true,
         downvotedUsers: true,
         comments: {
-          user: true
-        }
+          user: true,
+        },
       },
     });
 
-    log('info', existedPost);
+    log("info", existedPost);
 
     if (existedPost)
       return ResponseBuilder.Ok(
@@ -32,7 +38,7 @@ export default async function getPostByID(req: Request, res: Response) {
       );
     return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
   } catch (e) {
-    log('warn', e)
-    ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    ResponseBuilder.InternalServerError(res);
   }
 }

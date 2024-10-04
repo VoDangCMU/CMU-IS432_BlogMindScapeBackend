@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, JoinColumn, ManyToMany, JoinTable } from "typeorm"
-import Post from "./Post"
+import Post from "@models/Post"
 
 @Entity()
 @Unique('UNIQUE_USERNAME', ['username'])
@@ -34,5 +34,3 @@ export default class User {
     @JoinTable()
     downvotedPosts: Array<Post>
 }
-
-module.exports = User;

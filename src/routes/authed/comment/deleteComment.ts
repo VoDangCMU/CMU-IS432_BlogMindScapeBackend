@@ -1,22 +1,25 @@
 import { Request, Response } from "express";
-import { Models, AppDataSource } from "@database/index";
+import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import CommentSchema from "@schemas/CommentSchema";
 import C from "@schemas/Schemas";
 import log from "@services/logger";
+import Comment from "@database/models/Comment";
 
-const User = Models.User;
-const Post = Models.Post;
-const Comment = Models.Comment;
 const commentRepository = AppDataSource.getRepository(Comment);
 
 export default async function deleteComment(req: Request, res: Response) {
+  let commentID, userID;
+
   try {
-    const commentID = C.NUMBER.parse(req.params.id);
-    const userID = C.NUMBER.parse(req.headers["userID"]);
+    commentID = C.NUMBER.parse(req.params.id);
+    userID = C.NUMBER.parse(req.headers["userID"]);
+  } catch (e) {
+    log("warn", e);
+    return ResponseBuilder.BadRequest(res, e);
+  }
 
-    log("info", commentID);
-
+  try {
     const existedComment = await commentRepository.findOne({
       where: {
         id: commentID,
@@ -46,7 +49,7 @@ export default async function deleteComment(req: Request, res: Response) {
       CommentSchema.ResponseSchema.parse(existedComment)
     );
   } catch (e) {
-    log("warn", e);
-    return ResponseBuilder.BadRequest(res, e);
+    log("error", e);
+    return ResponseBuilder.InternalServerError(res);
   }
 }
