@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
-import CommentSchema from "@schemas/CommentSchema";
-import C from "@schemas/Schemas";
+import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import Comment from "@database/models/Comment";
+import { COMMENT_RESPONSE_SCHEMA } from "@database/repo/CommentRepository";
 
 const commentRepository = AppDataSource.getRepository(Comment);
 
@@ -15,7 +15,7 @@ export default async function deleteComment(req: Request, res: Response) {
     commentID = C.NUMBER.parse(req.params.id);
     userID = C.NUMBER.parse(req.headers["userID"]);
   } catch (e) {
-    log("warn", e);
+    log.warn(e);
     return ResponseBuilder.BadRequest(res, e);
   }
 
@@ -32,7 +32,7 @@ export default async function deleteComment(req: Request, res: Response) {
       },
     });
 
-    log("info", existedComment);
+    log.info(existedComment);
 
     if (!existedComment)
       return ResponseBuilder.NotFound(res, "COMMENT_NOT_FOUND");
@@ -46,10 +46,10 @@ export default async function deleteComment(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      CommentSchema.ResponseSchema.parse(existedComment)
+      COMMENT_RESPONSE_SCHEMA.parse(existedComment)
     );
   } catch (e) {
-    log("error", e);
+    log.error("error", e);
     return ResponseBuilder.InternalServerError(res);
   }
 }

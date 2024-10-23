@@ -1,26 +1,22 @@
 import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import { AppDataSource } from "@database/DataSource";
-import PostSchema from "@schemas/PostSchema";
-import Post from "@database/models/Post";
-import C from "@schemas/Schemas";
+import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-
-const postRepository = AppDataSource.getRepository(Post);
+import postRepository, { findOnePost, POST_RESPONSE_SCHEMA, POST_UPDATE_SCHEMA } from "@database/repo/PostRepository";
 
 export default async function updatePost(req: Request, res: Response) {
   let reqBody, userID;
 
   try {
-    reqBody = PostSchema.UpdateSchema.parse(req.body);
+    reqBody = POST_UPDATE_SCHEMA.parse(req.body);
     userID = C.NUMBER.parse(req.headers["userID"]);
   } catch (e) {
-    log("warn", e);
+    log.warn(e);
     return ResponseBuilder.BadRequest(res, e);
   }
 
   try {
-    const existedPost = await postRepository.findOne({
+    const existedPost = await findOnePost({
       where: { id: reqBody.id },
     });
 
@@ -30,17 +26,17 @@ export default async function updatePost(req: Request, res: Response) {
 
     await postRepository.save(reqBody);
 
-    const updatedPost = await postRepository.findOne({
+    const updatedPost = await findOnePost({
       where: { id: reqBody.id },
       relations: { user: true },
     });
 
     return ResponseBuilder.Ok(
       res,
-      PostSchema.ResponseSchema.parse(updatedPost!)
+      POST_RESPONSE_SCHEMA.parse(updatedPost!)
     );
   } catch (e) {
-    log("error", e);
+    log.error(e);
     return ResponseBuilder.InternalServerError(res, e);
   }
 }

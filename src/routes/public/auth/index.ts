@@ -1,56 +1,50 @@
 import { CookieOptions, Router } from "express";
-
-import User from "@database/models/User";
-import { AppDataSource } from "@database/DataSource";
-import UserSchema from "@schemas/UserSchema";
 import { signToken } from "@services/jwt";
-import { compare, hash } from "@services/hasher";
+import { compare } from "@services/hasher";
 import ResponseBuilder from "@services/responseBuilder";
 import log from "@services/logger";
+import {
+  createUser,
+  findOneUser,
+  USER_CREATE_SCHEMA,
+  USER_LOGIN_PARAMS_SCHEMA,
+  USER_RESPONSE_SCHEMA,
+} from "@database/repo/UserRepository";
 
 const auth = Router();
 
-const userRepository = AppDataSource.getRepository(User);
-
 auth.post("/register", async (req, res) => {
-  let reqBody;
+  const parsed = USER_CREATE_SCHEMA.safeParse(req.body);
 
-  try {
-    reqBody = UserSchema.CreateSchema.parse(req.body);
-  } catch (e) {
-    log("warn", e);
-    return ResponseBuilder.BadRequest(res, e);
+  if (parsed.error) {
+    log.warn(parsed.error);
+    return ResponseBuilder.BadRequest(res, parsed.error);
   }
 
-  try {
-    let user = new User();
-    user.dateOfBirth = new Date(reqBody.dateOfBirth);
-    user.fullname = reqBody.fullname;
-    user.mail = reqBody.mail;
-    user.username = reqBody.username;
-    user.password = hash(reqBody.password);
+  const reqBody = parsed.data
 
-    await userRepository.save(user);
-    return ResponseBuilder.Ok(res, UserSchema.ResponseSchema.parse(user));
+  try {
+    const createdUser = await createUser(reqBody);
+    return ResponseBuilder.Ok(
+      res,
+      USER_RESPONSE_SCHEMA.parse(createdUser)
+    );
   } catch (e) {
-    ResponseBuilder.InternalServerError(res);
-    log("error", e);
+    log.error(e);
+    return ResponseBuilder.InternalServerError(res);
   }
 });
 
 auth.post("/login", async (req, res) => {
-  let reqBody;
+  let parsed = USER_LOGIN_PARAMS_SCHEMA.safeParse(req.body);;
 
-  try {
-    reqBody = UserSchema.LoginParamsSchema.parse(req.body);
-  } catch (e) {
-    log("warn", e);
-    return ResponseBuilder.BadRequest(res, e);
+  if (parsed.error) {
+    log.warn(parsed.error);
+    return ResponseBuilder.BadRequest(res, parsed.error);
   }
-  
-  const user = await userRepository.findOne({
-    where: { username: reqBody.username },
-  });
+
+  const reqBody = parsed.data;
+  const user = await findOneUser({ where: { username: reqBody.username } });
 
   if (user) {
     if (compare(reqBody.password, user.password)) {

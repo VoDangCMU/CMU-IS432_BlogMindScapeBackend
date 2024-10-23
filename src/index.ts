@@ -8,6 +8,9 @@ import { AppDataSource } from "./database/DataSource";
 import { isAuth } from "./middlewares/isAuth";
 import env from "./env";
 import notfound from "./routes/[404]";
+import log from "@services/logger";
+
+log.info("Starting Application");
 
 const app = express();
 
@@ -44,8 +47,8 @@ AppDataSource.initialize().then(() => {
   app.use("*", notfound);
 
   app.listen(env.APPLICATION_PORT, () => {
-    console.log(
-      `Application Start at PORT ${env.APPLICATION_PORT}\nENV=${env.ENV}`
+    log.info(
+      `Application Start at PORT ${env.APPLICATION_PORT}\tENV=${env.ENV}\tURL=http://127.0.0.1:${env.APPLICATION_PORT}`
     );
   });
 });

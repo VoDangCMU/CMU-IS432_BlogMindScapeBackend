@@ -1,20 +1,17 @@
 import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import { AppDataSource } from "@database/DataSource";
-import C from "@schemas/Schemas";
-import Post from "@database/models/Post";
+import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
+import { deletePost, findOnePost } from "@database/repo/PostRepository";
 
-const postRepository = AppDataSource.getRepository(Post);
-
-export default async function deletePost(req: Request, res: Response) {
+export default async function _deletePost(req: Request, res: Response) {
   let postID, userID;
 
   try {
     postID = C.NUMBER.parse(req.params.id);
     userID = C.NUMBER.parse(req.headers["userID"]);
   } catch (e) {
-    log("warn", e);
+    log.warn(e);
     return ResponseBuilder.BadRequest(res, e);
   }
 
@@ -22,7 +19,7 @@ export default async function deletePost(req: Request, res: Response) {
     const postID = C.NUMBER.parse(req.params.id);
     const userID = C.NUMBER.parse(req.headers["userID"]);
 
-    const deletedPost = await postRepository.findOne({
+    const deletedPost = await findOnePost({
       where: { id: postID },
       relations: { user: true },
     });
@@ -32,11 +29,11 @@ export default async function deletePost(req: Request, res: Response) {
     if (deletedPost.user.id != userID)
       return ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
 
-    postRepository.delete(postID);
+    await deletePost(postID);
 
     return ResponseBuilder.Ok(res, deletedPost);
   } catch (e) {
-    log("error", e);
+    log.error(e);
     return ResponseBuilder.InternalServerError(res, e);
   }
 }

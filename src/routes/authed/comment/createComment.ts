@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
-import CommentSchema from "@schemas/CommentSchema";
-import C from "@schemas/Schemas";
+import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import Post from "@database/models/Post";
 import User from "@database/models/User";
 import Comment from "@database/models/Comment";
+import { COMMENT_CREATE_SCHEMA, COMMENT_RESPONSE_SCHEMA } from "@database/repo/CommentRepository";
 
 const postRepository = AppDataSource.getRepository(Post);
 const userRepository = AppDataSource.getRepository(User);
@@ -16,10 +16,10 @@ export default async function createComment(req: Request, res: Response) {
   let reqBody, userID;
 
   try {
-    reqBody = CommentSchema.CreateSchema.parse(req.body);
+    reqBody = COMMENT_CREATE_SCHEMA.parse(req.body);
     userID = C.NUMBER.parse(req.headers["userID"]);
   } catch (e) {
-    log("warn", e);
+    log.warn(e);
     return ResponseBuilder.BadRequest(res, e);
   }
 
@@ -41,14 +41,14 @@ export default async function createComment(req: Request, res: Response) {
 
     await commentRepository.save(createdComment);
 
-    log("info", createdComment);
+    log.info(createdComment);
 
     return ResponseBuilder.Ok(
       res,
-      CommentSchema.ResponseSchema.parse(createdComment)
+      COMMENT_RESPONSE_SCHEMA.parse(createdComment)
     );
   } catch (e) {
-    log("error", e);
+    log.error(e);
     return ResponseBuilder.InternalServerError(res);
   }
 }

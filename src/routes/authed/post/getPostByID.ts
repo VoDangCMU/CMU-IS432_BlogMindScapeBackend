@@ -1,23 +1,19 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
-import C from "@schemas/Schemas";
-import PostSchema from "@schemas/PostSchema";
+import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import Post from "@database/models/Post";
-
-const postRepository = AppDataSource.getRepository(Post);
+import { findOnePost, POST_RESPONSE_SCHEMA } from "@database/repo/PostRepository";
 
 export default async function getPostByID(req: Request, res: Response) {
   let postID;
   try {
     postID = C.NUMBER.parse(req.params.id);
   } catch (e) {
-    log("warn", e);
+    log.warn(e);
     ResponseBuilder.BadRequest(res, e);
   }
   try {
-    const existedPost = await postRepository.findOne({
+    const existedPost = await findOnePost({
       where: { id: postID },
       relations: {
         user: true,
@@ -29,16 +25,16 @@ export default async function getPostByID(req: Request, res: Response) {
       },
     });
 
-    log("info", existedPost);
+    log.info(existedPost);
 
     if (existedPost)
       return ResponseBuilder.Ok(
         res,
-        PostSchema.ResponseSchema.parse(existedPost)
+        POST_RESPONSE_SCHEMA.parse(existedPost)
       );
     return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
   } catch (e) {
-    log("error", e);
+    log.error(e);
     ResponseBuilder.InternalServerError(res);
   }
 }

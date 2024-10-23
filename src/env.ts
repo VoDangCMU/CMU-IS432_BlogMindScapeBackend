@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { config } from "dotenv";
-import C, { NUMBER, STRING } from "./schemas/Schemas";
+import C, { NUMBER, STRING } from "./database/repo/CommonSchemas";
 
 config();
 
@@ -8,6 +8,7 @@ const portPerEnv = {
   development: 4000,
   staging: 4000,
   production: 5000,
+  testing: 4000,
 };
 
 const envSchema = z.object({
@@ -17,6 +18,7 @@ const envSchema = z.object({
       z.literal("development"),
       z.literal("staging"),
       z.literal("production"),
+      z.literal("testing"),
     ])
     .default("development"),
   DB_HOST: STRING.ip(),
