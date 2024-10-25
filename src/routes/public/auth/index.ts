@@ -3,9 +3,8 @@ import { signToken } from "@services/jwt";
 import { compare } from "@services/hasher";
 import ResponseBuilder from "@services/responseBuilder";
 import log from "@services/logger";
-import {
+import userRepository, {
   createUser,
-  findOneUser,
   USER_CREATE_SCHEMA,
   USER_LOGIN_PARAMS_SCHEMA,
   USER_RESPONSE_SCHEMA,
@@ -44,7 +43,7 @@ auth.post("/login", async (req, res) => {
   }
 
   const reqBody = parsed.data;
-  const user = await findOneUser({ where: { username: reqBody.username } });
+  const user = await userRepository.findOne({ where: { username: reqBody.username } });
 
   if (user) {
     if (compare(reqBody.password, user.password)) {

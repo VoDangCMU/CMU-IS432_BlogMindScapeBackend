@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="29a2ff6e-8eaa-41ab-afb3-1ff4b6785288" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database/DataSource.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/DataSource.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/env.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/env.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/logger.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database/repo/PostRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/repo/PostRepository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database/repo/UserRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/repo/UserRepository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/deletePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/deletePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/downvotePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/downvotePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/getPostByID.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/getPostByID.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/unDownvotePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/unDownvotePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/unUpvotePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/unUpvotePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/updatePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/updatePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/authed/post/upvotePost.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/authed/post/upvotePost.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/public/auth/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/public/auth/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,9 +25,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2nE5uJ1hT24GVByzDjmPj1kzrPt" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -29,11 +36,62 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Shell Script.Start Development.executor": "Run",
+    "Shell Script.Test.executor": "Run",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "D:/SourceCode/NodeJS/blog/miniblog_backend",
-    "nodejs_package_manager_path": "yarn"
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "D:\\SourceCode\\NodeJS\\blog\\miniblog_backend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager" selected="Shell Script.Start Development">
+    <configuration name="Start Development" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="yarn dev" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="yarn test" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Shell Script.Start Development" />
+      <item itemvalue="Shell Script.Test" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23726.96" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -42,7 +100,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1728525616592</updated>
+      <workItem from="1729849017151" duration="1551000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

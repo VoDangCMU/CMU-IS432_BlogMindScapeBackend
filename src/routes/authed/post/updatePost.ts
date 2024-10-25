@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import postRepository, { findOnePost, POST_RESPONSE_SCHEMA, POST_UPDATE_SCHEMA } from "@database/repo/PostRepository";
+import postRepository, { POST_RESPONSE_SCHEMA, POST_UPDATE_SCHEMA } from "@database/repo/PostRepository";
 
 export default async function updatePost(req: Request, res: Response) {
   let reqBody, userID;
@@ -16,7 +16,7 @@ export default async function updatePost(req: Request, res: Response) {
   }
 
   try {
-    const existedPost = await findOnePost({
+    const existedPost = await postRepository.findOne({
       where: { id: reqBody.id },
     });
 
@@ -26,7 +26,7 @@ export default async function updatePost(req: Request, res: Response) {
 
     await postRepository.save(reqBody);
 
-    const updatedPost = await findOnePost({
+    const updatedPost = await postRepository.findOne({
       where: { id: reqBody.id },
       relations: { user: true },
     });

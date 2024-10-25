@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import postRepository, { findOnePost, POST_RESPONSE_SCHEMA } from "@database/repo/PostRepository";
-import { findOneUser } from "@database/repo/UserRepository";
+import postRepository, { POST_RESPONSE_SCHEMA } from "@database/repo/PostRepository";
+import userRepository from "@database/repo/UserRepository";
 
 export default async function unUpvotePost(req: Request, res: Response) {
   let postID, userID;
@@ -17,11 +17,11 @@ export default async function unUpvotePost(req: Request, res: Response) {
   }
 
   try {
-    const user = await findOneUser({
+    const user = await userRepository.findOne({
       where: { id: userID },
     });
 
-    const existedPost = await findOnePost({
+    const existedPost = await postRepository.findOne({
       where: { id: postID },
       relations: {
         user: true,

@@ -61,7 +61,4 @@ export async function findUserByID(id: number | string) {
   return user;
 }
 
-export const findUser = userRepository.find;
-export const findOneUser = userRepository.findOne;
-
 export default userRepository;

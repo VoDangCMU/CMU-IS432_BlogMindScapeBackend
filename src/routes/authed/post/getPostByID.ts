@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import { findOnePost, POST_RESPONSE_SCHEMA } from "@database/repo/PostRepository";
+import postRepository, { POST_RESPONSE_SCHEMA } from "@database/repo/PostRepository";
 
 export default async function getPostByID(req: Request, res: Response) {
   let postID;
@@ -13,7 +13,7 @@ export default async function getPostByID(req: Request, res: Response) {
     ResponseBuilder.BadRequest(res, e);
   }
   try {
-    const existedPost = await findOnePost({
+    const existedPost = await postRepository.findOne({
       where: { id: postID },
       relations: {
         user: true,

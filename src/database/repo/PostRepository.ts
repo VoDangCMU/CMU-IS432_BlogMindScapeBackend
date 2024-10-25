@@ -2,8 +2,7 @@ import { AppDataSource } from "@database/DataSource";
 import Post from "@database/models/Post";
 import { NUMBER, STRING } from "@database/repo/CommonSchemas";
 import { z } from "zod";
-import {
-  findOneUser,
+import userRepository, {
   USER_RESPONSE_SCHEMA,
   USERS_RESPONSE_SCHEMA,
 } from "./UserRepository";
@@ -44,7 +43,7 @@ export async function createPost(
   authorID: number | string
 ) {
   const _authorID = NUMBER.parse(authorID);
-  const author = await findOneUser({ where: { id: _authorID } });
+  const author = await userRepository.findOne({ where: { id: _authorID } });
 
   if (!author) throw new Error("USER_NOT_FOUND");
 
@@ -70,8 +69,5 @@ export async function findPostByID(postID: number | string) {
 export async function deletePost(postID: number | string) {
   postRepository.delete(postID);
 }
-
-export const findPost = postRepository.find;
-export const findOnePost = postRepository.findOne;
 
 export default postRepository;

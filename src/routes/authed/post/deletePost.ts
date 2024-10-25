@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import { deletePost, findOnePost } from "@database/repo/PostRepository";
+import postRepository, { deletePost } from "@database/repo/PostRepository";
 
 export default async function _deletePost(req: Request, res: Response) {
   let postID, userID;
@@ -19,7 +19,7 @@ export default async function _deletePost(req: Request, res: Response) {
     const postID = C.NUMBER.parse(req.params.id);
     const userID = C.NUMBER.parse(req.headers["userID"]);
 
-    const deletedPost = await findOnePost({
+    const deletedPost = await postRepository.findOne({
       where: { id: postID },
       relations: { user: true },
     });
