@@ -6,7 +6,7 @@ import {createDatabase, dropDatabase} from "typeorm-extension";
 import log from "@services/logger";
 
 export default async function purgeDB(req: Request, res: Response) {
-	if (env.ENV !== 'testing' && env.ENV !== 'staging') {}
+	if (env.ENV !== 'testing' && env.ENV !== 'staging')
 		return ResponseBuilder.Forbidden(res);
 
 	// log.info(AppDataSourceOptions)
