@@ -4,7 +4,7 @@ import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import Comment from "@database/models/Comment";
-import { COMMENT_RESPONSE_SCHEMA } from "@database/repo/CommentRepository";
+import { COMMENT_SCHEMA } from "@database/repo/CommentRepository";
 
 const commentRepository = AppDataSource.getRepository(Comment);
 
@@ -46,7 +46,7 @@ export default async function deleteComment(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      COMMENT_RESPONSE_SCHEMA.parse(existedComment)
+      COMMENT_SCHEMA.parse(existedComment)
     );
   } catch (e) {
     log.error("error", e);

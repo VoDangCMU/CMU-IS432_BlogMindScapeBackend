@@ -2,12 +2,14 @@ import { AppDataSource } from "@database/DataSource";
 import Post from "@database/models/Post";
 import { NUMBER, STRING } from "@database/repo/CommonSchemas";
 import { z } from "zod";
-import userRepository, {
-  USER_RESPONSE_SCHEMA,
-  USERS_RESPONSE_SCHEMA,
+import UserRepository, {
+  USER_SCHEMA
 } from "./UserRepository";
+import {} from "@database/repo/CommentRepository";
+import {FindManyOptions, FindOneOptions} from "typeorm";
+import MessageCodes from "@root/messageCodes";
 
-const postRepository = AppDataSource.getRepository(Post);
+const PostRepository = AppDataSource.getRepository(Post);
 
 export const BASE_POST = z.object({
   id: NUMBER.optional(),
@@ -15,6 +17,7 @@ export const BASE_POST = z.object({
   body: STRING,
   upvote: NUMBER,
   downvote: NUMBER,
+  user: USER_SCHEMA
 });
 
 export const POST_CREATE_SCHEMA = z.object({
@@ -22,30 +25,25 @@ export const POST_CREATE_SCHEMA = z.object({
   body: STRING,
 });
 
-export const POST_RESPONSE_SCHEMA = BASE_POST.extend({
-  user: USER_RESPONSE_SCHEMA.optional(),
-  upvotedUsers: USERS_RESPONSE_SCHEMA,
-  downvotedUsers: USERS_RESPONSE_SCHEMA,
-  comments: USERS_RESPONSE_SCHEMA,
-});
-
+export const POST_SCHEMA = BASE_POST;
+export const POSTS_SCHEMA = z.array(BASE_POST);
 export const POST_UPDATE_SCHEMA = z.object({
   id: NUMBER,
   title: STRING.optional(),
   body: STRING.optional(),
 });
 
-declare type BasePost = z.TypeOf<typeof BASE_POST>;
-declare type PostCreateSchema = z.TypeOf<typeof POST_CREATE_SCHEMA>;
+export declare type BasePost = z.TypeOf<typeof BASE_POST>;
+export declare type PostCreateSchema = z.TypeOf<typeof POST_CREATE_SCHEMA>;
 
 export async function createPost(
   params: PostCreateSchema,
   authorID: number | string
 ) {
   const _authorID = NUMBER.parse(authorID);
-  const author = await userRepository.findOne({ where: { id: _authorID } });
+  const author = await UserRepository.findOne({ where: { id: _authorID } });
 
-  if (!author) throw new Error("USER_NOT_FOUND");
+  if (!author) throw new Error(MessageCodes.USER_NOT_EXISTED);
 
   let createdPost = new Post();
 
@@ -53,21 +51,9 @@ export async function createPost(
   createdPost.body = params.body;
   createdPost.user = author;
 
-  await postRepository.save(createdPost);
+  await PostRepository.save(createdPost);
 
-  return createdPost;
+  return POST_SCHEMA.parse(createdPost);
 }
 
-export async function findPostByID(postID: number | string) {
-  const post = await postRepository.findOne({
-    where: { id: NUMBER.parse(postID) },
-  });
-
-  return post;
-}
-
-export async function deletePost(postID: number | string) {
-  postRepository.delete(postID);
-}
-
-export default postRepository;
+export default PostRepository;

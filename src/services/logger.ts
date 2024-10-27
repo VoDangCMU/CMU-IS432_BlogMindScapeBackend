@@ -9,19 +9,6 @@ const prefix = {
   error: chalk.bgRed.bold.blue(" ERROR "),
 };
 
-// /**
-//  *
-//  * @param logLevel
-//  * @param data
-//  * @returns
-//  */
-// export default function log(logLevel: LogLevel, ...data: any[]) {
-//   if (env.ENV == "production" && logLevel != "error") return;
-//   if (env.ENV == "staging" && logLevel == "info") return;
-
-//   console.log(prefix[logLevel], ...data);
-// }
-
 const log = {
   info(...data: any[]) {
     console.log(prefix['info'], ...data);

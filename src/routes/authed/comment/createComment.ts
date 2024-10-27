@@ -6,7 +6,7 @@ import log from "@services/logger";
 import Post from "@database/models/Post";
 import User from "@database/models/User";
 import Comment from "@database/models/Comment";
-import { COMMENT_CREATE_SCHEMA, COMMENT_RESPONSE_SCHEMA } from "@database/repo/CommentRepository";
+import { COMMENT_CREATE_SCHEMA, COMMENT_SCHEMA } from "@database/repo/CommentRepository";
 
 const postRepository = AppDataSource.getRepository(Post);
 const userRepository = AppDataSource.getRepository(User);
@@ -45,7 +45,7 @@ export default async function createComment(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      COMMENT_RESPONSE_SCHEMA.parse(createdComment)
+      COMMENT_SCHEMA.parse(createdComment)
     );
   } catch (e) {
     log.error(e);

@@ -4,7 +4,7 @@ import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import Comment from "@database/models/Comment";
-import { COMMENT_RESPONSE_SCHEMA, COMMENT_UPDATE_SCHEMA } from "@database/repo/CommentRepository";
+import { COMMENT_SCHEMA, COMMENT_UPDATE_SCHEMA } from "@database/repo/CommentRepository";
 
 const commentRepository = AppDataSource.getRepository(Comment);
 
@@ -50,7 +50,7 @@ export default async function updateComment(req: Request, res: Response) {
 
     return ResponseBuilder.Ok(
       res,
-      COMMENT_RESPONSE_SCHEMA.parse(updatedComment)
+      COMMENT_SCHEMA.parse(updatedComment)
     );
   } catch (e) {
     log.error(e);

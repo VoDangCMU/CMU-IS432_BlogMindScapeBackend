@@ -32,6 +32,15 @@ AppDataSource.initialize().then(() => {
     app.use(`/${router}`, req_router);
   }
 
+  // For http testing
+  const testOnlyRouterPath = path.resolve(__dirname, "routes", "test_only");
+  const testOnlyRouter: Array<string> = fs.readdirSync(testOnlyRouterPath);
+
+  for (const router of testOnlyRouter) {
+    const req_router = require(`./routes/test_only/${router}/index`);
+    app.use(`/${router}`, req_router);
+  }
+
   app.use(isAuth);
 
   // Authed router

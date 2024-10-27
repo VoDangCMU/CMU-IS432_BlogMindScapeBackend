@@ -20,7 +20,7 @@ export default class User {
     @Column()
     dateOfBirth: Date
 
-    @Column()
+    @Column({select: false})
     password: string
 
     @OneToMany(() => Post, (post) => post.user, { onDelete: "CASCADE"})

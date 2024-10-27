@@ -1,13 +1,14 @@
-import { Router } from "express";
+import {Router} from "express";
 
-import getPostByID from "./getPostByID";
-import createPost from "./createPost";
-import deletePost from "./deletePost";
-import updatePost from "./updatePost";
-import upvotePost from "./upvotePost";
-import downvotePost from "./downvotePost";
-import unUpvotePost from "./unUpvotePost";
-import unDownvotePost from "./unDownvotePost";
+import getPostByID from "./get/getPostByID";
+import createPost from "./create/createPost";
+import deletePost from "./delete/deletePost";
+import updatePost from "./update/updatePost";
+import upvotePost from "./update/upvotePost";
+import downvotePost from "./update/downvotePost";
+import unUpvotePost from "./delete/unUpvotePost";
+import unDownvotePost from "./delete/unDownvotePost";
+import getPostComments from "@routes/authed/post/get/getPostComments";
 
 const post = Router();
 
@@ -19,6 +20,8 @@ post.put("/upvote/:id", upvotePost);
 post.put("/downvote/:id", downvotePost);
 post.delete("/upvote/:id", unUpvotePost);
 post.delete("/downvote/:id", unDownvotePost);
+
+post.get("/comments/:postId", getPostComments);
 
 export default post;
 module.exports = post;

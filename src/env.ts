@@ -8,7 +8,7 @@ const portPerEnv = {
   development: 4000,
   staging: 4000,
   production: 5000,
-  testing: 4000,
+  testing: 4455,
 };
 
 const envSchema = z.object({
