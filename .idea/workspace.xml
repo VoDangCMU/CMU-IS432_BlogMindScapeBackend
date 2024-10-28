@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="29a2ff6e-8eaa-41ab-afb3-1ff4b6785288" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/messageCodes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/messageCodes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/test_only/db/purgeDB.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/test_only/db/purgeDB.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -4,7 +4,8 @@ const MessageCodes = {
     USER_NOT_EXISTED:"Cannot found user",
     POST_NOT_EXISTED: "Cannot found post",
     NOT_OWN_POST: "You cannot do this interaction to others' post",
-    NaN: " is not a number"
+    NaN: " is not a number",
+    DATABASE_BUSY: "Database is being accessed by other users"
 }
 
 export default MessageCodes;
