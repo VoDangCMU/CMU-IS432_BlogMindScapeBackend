@@ -1,8 +1,7 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import PostRepository, { POST_SCHEMA } from "@database/repo/PostRepository";
 import CommentRepository from "@database/repo/CommentRepository";
 
 export default async function getPostComments(req: Request, res: Response) {
