@@ -29,7 +29,9 @@ export default async function updatePost(req: Request, res: Response) {
     if (existedPost.user.id != userID)
       return ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
 
-    await PostRepository.save(reqBody);
+    existedPost.upvote++;
+
+    await PostRepository.save(existedPost);
 
     const updatedPost = await PostRepository.findOne({
       where: { id: reqBody.id },

@@ -9,6 +9,7 @@ import downvotePost from "./update/downvotePost";
 import unUpvotePost from "./delete/unUpvotePost";
 import unDownvotePost from "./delete/unDownvotePost";
 import getPostComments from "@routes/authed/post/get/getPostComments";
+import getPostUpvotes from "@routes/authed/post/get/getPostUpvotes";
 
 const post = Router();
 
@@ -22,6 +23,7 @@ post.delete("/upvote/:id", unUpvotePost);
 post.delete("/downvote/:id", unDownvotePost);
 
 post.get("/comments/:postId", getPostComments);
+post.get("/upvotes/:postId", getPostUpvotes);
 
 export default post;
 module.exports = post;
