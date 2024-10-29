@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import cors from "cors";
+import cors, {CorsOptions} from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import {AppDataSource} from "./database/DataSource";
@@ -14,11 +14,26 @@ log.info("Starting Application");
 
 const app = express();
 
-app.use(cookieParser());
-app.use(cors({
+const whitelist = [
+	"localhost",
+	"*",
+	"khoav4.com"
+]
+
+const corsOption: CorsOptions = {
 	credentials: true,
-	origin: ['http://localhost:3000', 'localhost', 'khoav4.com', 'http://khoav4.com', 'https://khoav4.com'],
-}));
+	optionsSuccessStatus: 200,
+	origin: function (origin, callback) {
+		if (whitelist.some((e) => origin?.includes(e))) {
+			callback(null, true)
+		} else {
+			callback(new Error('Not allowed by CORS'))
+		}
+	}
+}
+
+app.use(cookieParser());
+app.use(cors(corsOption));
 app.use(bodyParser.json());
 app.get("/hello", (req, res) => {
 	res.json({message: "world"});
