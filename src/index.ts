@@ -17,7 +17,15 @@ const app = express();
 app.use(cookieParser());
 app.use(cors({
 	credentials: true,
-	origin: "*"
+	origin: (origin, callback) => {
+		var whitelist = ['http://localhost:3000', "khoav4.com", "http://khoav4.com", "https://khoav4.com" ]
+
+		if (whitelist.indexOf(origin || "\/\/") !== -1) {
+			callback(null, true)
+		} else {
+			callback(new Error('Not allowed by CORS'))
+		}
+	}
 }));
 app.use(bodyParser.json());
 app.get("/hello", (req, res) => {
