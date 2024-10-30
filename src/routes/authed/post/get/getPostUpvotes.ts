@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import ResponseBuilder from "@services/responseBuilder";
 import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import PostRepository, { POST_SCHEMA } from "@database/repo/PostRepository";
+import PostRepository, {POST_SCHEMA} from "@database/repo/PostRepository";
 import CommentRepository from "@database/repo/CommentRepository";
 import MessageCodes from "@root/messageCodes";
+import UpvoteRepository from "@database/repo/UpvoteRepository";
 
 export default async function getPostUpvotes(req: Request, res: Response) {
 	let postID;
@@ -19,12 +20,21 @@ export default async function getPostUpvotes(req: Request, res: Response) {
 
 	const postId = parsedPostId.data;
 
-	PostRepository
-		.findOne({where: {id: postId}, relations: {upvotedUsers: true}})
-		.then((post) => {
-			if (!post)
-				return ResponseBuilder.NotFound(res, MessageCodes.POST_NOT_EXISTED);
+	UpvoteRepository.find({
+		where: {
+			post: {
+				id: postId
+			}
+		},
+		relations: {user: true}
+	})
+		.then((upvotes) => {
+			const users = upvotes.map(e => e.user);
 
-			return ResponseBuilder.Ok(res, post.upvotedUsers);
+			return ResponseBuilder.Ok(res, users);
+		})
+		.catch((err) => {
+			log.error(err);
+			return ResponseBuilder.InternalServerError(res);
 		})
 }

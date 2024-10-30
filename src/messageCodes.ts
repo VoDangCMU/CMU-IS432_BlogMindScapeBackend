@@ -5,7 +5,11 @@ const MessageCodes = {
     POST_NOT_EXISTED: "Cannot found post",
     NOT_OWN_POST: "You cannot do this interaction to others' post",
     NaN: " is not a number",
-    DATABASE_BUSY: "Database is being accessed by other users"
+    DATABASE_BUSY: "Database is being accessed by other users",
+    NOT_UPVOTE_YET: "You must upvote this post before using this function",
+    NOT_DOWNVOTE_YET: "You must downvote this post before using this function",
+    ALREADY_UPVOTE: "You already upvoted this post",
+    ALREADY_DOWNVOTE: "You already downvoted this post",
 }
 
 export default MessageCodes;

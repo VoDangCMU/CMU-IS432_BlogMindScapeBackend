@@ -5,6 +5,8 @@ import log from "@services/logger";
 import PostRepository, { POST_SCHEMA } from "@database/repo/PostRepository";
 import CommentRepository from "@database/repo/CommentRepository";
 import MessageCodes from "@root/messageCodes";
+import UpvoteRepository from "@database/repo/UpvoteRepository";
+import DownvoteRepository from "@database/repo/DownvoteRepository";
 
 export default async function getPostDownvotes(req: Request, res: Response) {
 	let postID;
@@ -19,12 +21,21 @@ export default async function getPostDownvotes(req: Request, res: Response) {
 
 	const postId = parsedPostId.data;
 
-	PostRepository
-		.findOne({where: {id: postId}, relations: {downvotedUsers: true}})
-		.then((post) => {
-			if (!post)
-				return ResponseBuilder.NotFound(res, MessageCodes.POST_NOT_EXISTED);
+	DownvoteRepository.find({
+		where: {
+			post: {
+				id: postId
+			}
+		},
+		relations: {user: true}
+	})
+		.then((downvotes) => {
+			const users = downvotes.map(e => e.user);
 
-			return ResponseBuilder.Ok(res, post.downvotedUsers);
+			return ResponseBuilder.Ok(res, users);
+		})
+		.catch((err) => {
+			log.error(err);
+			return ResponseBuilder.InternalServerError(res);
 		})
 }

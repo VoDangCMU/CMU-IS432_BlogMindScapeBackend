@@ -22,15 +22,4 @@ export default class User {
 
     @Column({select: false})
     password: string
-
-    @OneToMany(() => Post, (post) => post.user, { onDelete: "CASCADE"})
-    posts: Array<Post>
-
-    @ManyToMany(() => Post, (post) => post.upvotedUsers, { onDelete: "CASCADE"})
-    @JoinTable()
-    upvotedPosts: Array<Post>
-
-    @ManyToMany(() => Post, (post) => post.downvotedUsers, { onDelete: "CASCADE"})
-    @JoinTable()
-    downvotedPosts: Array<Post>
 }

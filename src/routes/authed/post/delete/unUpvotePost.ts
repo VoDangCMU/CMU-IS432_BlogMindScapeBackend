@@ -4,6 +4,8 @@ import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import PostRepository, { POST_SCHEMA } from "@database/repo/PostRepository";
 import UserRepository from "@database/repo/UserRepository";
+import UpvoteRepository from "@database/repo/UpvoteRepository";
+import MessageCodes from "@root/messageCodes";
 
 export default async function unUpvotePost(req: Request, res: Response) {
   let postID, userID;
@@ -25,18 +27,23 @@ export default async function unUpvotePost(req: Request, res: Response) {
       where: { id: postID },
       relations: {
         user: true,
-        upvotedUsers: true,
       },
     });
 
-    if (!user) return ResponseBuilder.NotFound(res, "USER");
-    if (!existedPost) return ResponseBuilder.NotFound(res, "POST");
-    if (!existedPost.upvotedUsers.some((e) => e.id == user.id))
-      return ResponseBuilder.BadRequest(res, "NOT_UPVOTED_YET");
+    if (!user) return ResponseBuilder.NotFound(res, MessageCodes.USER_NOT_EXISTED);
+    if (!existedPost) return ResponseBuilder.NotFound(res, MessageCodes.POST_NOT_EXISTED);
 
-    existedPost.upvotedUsers = existedPost.upvotedUsers.filter(
-      (e) => e.id != userID
-    );
+    const existedUpvote = await UpvoteRepository.findOne({
+      where: {
+        user: {id: user.id},
+        post: {id: existedPost.id}
+      },
+      relations: {user: true, post: true}
+    })
+
+    if (!existedUpvote) return ResponseBuilder.NotFound(res, MessageCodes.NOT_UPVOTE_YET);
+
+    await UpvoteRepository.delete(existedUpvote);
     existedPost.upvote--;
 
     await PostRepository.save(existedPost);
