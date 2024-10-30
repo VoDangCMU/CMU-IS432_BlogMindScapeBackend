@@ -9,6 +9,7 @@ import {isAuth} from "./middlewares/isAuth";
 import env from "./env";
 import notfound from "./routes/[404]";
 import log from "@services/logger";
+import morgan from "morgan";
 
 log.info("Starting Application");
 
@@ -30,6 +31,10 @@ const corsOption: CorsOptions = {
 			callback(new Error('Not allowed by CORS'))
 		}
 	}
+}
+
+if (env.ENV !== "production") {
+	app.use(morgan("dev"));
 }
 
 app.use(cookieParser());

@@ -4,6 +4,9 @@ import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import PostRepository, {POST_SCHEMA,} from "@database/repo/PostRepository";
 import UserRepository from "@database/repo/UserRepository";
+import DownvoteRepository, {createDownvote} from "@database/repo/DownvoteRepository";
+import UpvoteRepository from "@database/repo/UpvoteRepository";
+import MessageCodes from "@root/messageCodes";
 
 export default async function downvotePost(req: Request, res: Response) {
 	const parsedPostID = C.NUMBER.safeParse(req.params.id);
@@ -31,19 +34,32 @@ export default async function downvotePost(req: Request, res: Response) {
 			where: {id: postID},
 			relations: {
 				user: true,
-				downvotedUsers: true,
-				upvotedUsers: true,
 			},
 		});
 
-		if (!user) return ResponseBuilder.NotFound(res, "USER_NOT_FOUND");
-		if (!existedPost) return ResponseBuilder.NotFound(res, "POST_NOT_FOUND");
-		if (existedPost.downvotedUsers.some((e) => e.id == user.id))
-			return ResponseBuilder.BadRequest(res, "ALREADY_DOWNVOTE");
-		if (existedPost.upvotedUsers.some((e) => e.id == user.id))
-			return ResponseBuilder.BadRequest(res, "ALREADY_UPVOTED");
+		if (!user) return ResponseBuilder.NotFound(res, MessageCodes.USER_NOT_EXISTED);
+		if (!existedPost) return ResponseBuilder.NotFound(res, MessageCodes.POST_NOT_EXISTED);
 
-		existedPost.downvotedUsers.push(user);
+		const existedDownvote = await DownvoteRepository.findOne({
+			where: {
+				user: {id: user.id},
+				post: {id: existedPost.id}
+			},
+			relations: {user: true, post: true}
+		})
+
+		const existedUpvote = await UpvoteRepository.findOne({
+			where: {
+				user: {id: user.id},
+				post: {id: existedPost.id}
+			},
+			relations: {user: true, post: true}
+		})
+
+		if (existedDownvote) return ResponseBuilder.BadRequest(res, MessageCodes.ALREADY_DOWNVOTE);
+		if (existedUpvote) return ResponseBuilder.BadRequest(res, MessageCodes.ALREADY_UPVOTE);
+
+		await createDownvote(user, existedPost);
 		existedPost.downvote++;
 
 		await PostRepository.save(existedPost);

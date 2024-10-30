@@ -18,7 +18,7 @@ export default class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 
   @Column()
@@ -32,14 +32,6 @@ export default class Post {
 
   @Column({ default: 0 })
   downvote: number;
-
-  @ManyToMany(() => User, (user) => user.upvotedPosts, { onDelete: "CASCADE" })
-  upvotedUsers: Array<User>;
-
-  @ManyToMany(() => User, (user) => user.downvotedPosts, {
-    onDelete: "CASCADE",
-  })
-  downvotedUsers: Array<User>;
 
   @OneToMany(() => Comment, (comment) => comment.post, { onDelete: "CASCADE" })
   comments: Array<Comment>;
