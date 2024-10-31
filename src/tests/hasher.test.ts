@@ -1,10 +1,10 @@
-import { hash, compare } from "@services/hasher";
+import {compare, hash} from "@services/hasher";
 
-test('Hash and Compare test', () => { 
-  const testString = "TEST"
-  const _hash = hash(testString);
+test('Hash and Compare test', () => {
+	const testString = "TEST"
+	const _hash = hash(testString);
 
-  const result = compare(testString, _hash);
+	const result = compare(testString, _hash);
 
-  expect(result).toBe(true);
+	expect(result).toBe(true);
 })
