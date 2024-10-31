@@ -1,4 +1,4 @@
-import UserRepository, {getUserByEmailOrUsername, USER_LOGIN_PARAMS_SCHEMA} from "@database/repo/UserRepository";
+import {getUserByEmailOrUsername, USER_LOGIN_PARAMS_SCHEMA} from "@database/repo/UserRepository";
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
 import {compare} from "@services/hasher";
@@ -7,7 +7,6 @@ import {CookieOptions, Request, Response} from "express";
 
 export default async function (req: Request, res: Response) {
 	let parsed = USER_LOGIN_PARAMS_SCHEMA.safeParse(req.body);
-	;
 
 	if (parsed.error) {
 		log.warn(parsed.error);
