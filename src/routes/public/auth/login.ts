@@ -1,4 +1,4 @@
-import {getUserByEmailOrUsername, USER_LOGIN_PARAMS_SCHEMA} from "@database/repo/UserRepository";
+import UserRepository, {getUserByEmailOrUsername, USER_LOGIN_PARAMS_SCHEMA} from "@database/repo/UserRepository";
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
 import {compare} from "@services/hasher";
@@ -30,7 +30,13 @@ export default async function (req: Request, res: Response) {
 					sameSite: "lax",
 				};
 
-				return res.cookie("jwt", token, cookieOps).status(200).json({token, user});
+				const loggedInUser = await UserRepository.findOne({
+					where: {username: user.username}
+				})
+
+				log.info(loggedInUser)
+
+				return res.cookie("jwt", token, cookieOps).status(200).json({token, user: loggedInUser});
 			}
 
 			return ResponseBuilder.NotFound(res, "Could not find user or wrong password");
