@@ -40,11 +40,10 @@
   },
   "scripts": {
     "dev": "nodemon -e ts,js --exec ts-node -r tsconfig-paths/register ./src/index.ts",
-    "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
+    "start": "cross-env ENV=production node ./dist/src/index.js",
     "test": "cross-env ENV=testing jest",
     "test-server": "cross-env ENV=testing ts-node -r tsconfig-paths/register ./src/index.ts",
-    "build": "tsc --build tsconfig.json && tsc-alias",
-    "start_prod": "cross-env ENV=production node ./dist/src/index.js"
+    "build": "tsc --build tsconfig.json && tsc-alias"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
