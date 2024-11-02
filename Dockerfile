@@ -8,6 +8,8 @@ COPY tsconfig.json ./
 
 COPY . .
 
+ENV ENV production
+
 RUN npm install --force --global yarn
 RUN npm install --force --global ts-node
 RUN npm install --force --global typescipt
@@ -16,4 +18,4 @@ RUN yarn build
 
 EXPOSE 5000
 
-CMD [ "yarn", "run", "start_prod" ]
+CMD [ "yarn", "start" ]

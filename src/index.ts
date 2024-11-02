@@ -79,7 +79,7 @@ AppDataSource.initialize().then(() => {
 	app.use("*", notfound);
 
 	app.listen(env.APPLICATION_PORT, () => {
-		log.info(
+		log.error(
 			`Application Start at PORT ${env.APPLICATION_PORT}\tENV=${env.ENV}\tURL=http://127.0.0.1:${env.APPLICATION_PORT}`
 		);
 	});
