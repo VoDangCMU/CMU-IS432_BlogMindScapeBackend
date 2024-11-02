@@ -42,12 +42,15 @@
     "dev": "nodemon -e ts,js --exec ts-node -r tsconfig-paths/register ./src/index.ts",
     "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "test": "cross-env ENV=testing jest",
-    "test-server": "cross-env ENV=testing ts-node -r tsconfig-paths/register ./src/index.ts"
+    "test-server": "cross-env ENV=testing ts-node -r tsconfig-paths/register ./src/index.ts",
+    "build": "tsc --build tsconfig.json && tsc-alias",
+    "start_prod": "cross-env ENV=production node ./dist/src/index.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "globals": "^15.9.0",
     "jest": "^29.7.0",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript-eslint": "^8.5.0"
   }
