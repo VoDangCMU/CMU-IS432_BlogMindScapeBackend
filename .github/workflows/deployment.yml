@@ -22,9 +22,5 @@ jobs:
           script: |
             cd ~/blog/blog_backend
             git pull
-            npm install --force --global ts-node
-            npm install --force --global typescript
-            npm install --force --global yarn
-            yarn install
             pm2 restart blog_backend || pm2 start ./start.sh --name blog_backend
             pm2 restart backend_staging || pm2 start ./start_staging.sh --name backend_staging
