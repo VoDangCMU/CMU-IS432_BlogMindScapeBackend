@@ -35,6 +35,7 @@ export default class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post, { onDelete: "CASCADE" })
   comments: Array<Comment>;
+
   @CreateDateColumn()
   createdAt: Date;
 }
