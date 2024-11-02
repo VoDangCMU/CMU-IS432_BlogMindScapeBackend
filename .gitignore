@@ -131,3 +131,6 @@ dist
 
 # Jetbrains ide
 .idea
+
+# vscode trash
+.vscode

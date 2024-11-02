@@ -8,7 +8,7 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
-  OneToMany,
+  OneToMany, CreateDateColumn,
 } from "typeorm";
 import User from "@models/User";
 import Comment from "@models/Comment";
@@ -35,4 +35,7 @@ export default class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post, { onDelete: "CASCADE" })
   comments: Array<Comment>;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

@@ -30,7 +30,7 @@ export default async function (req: Request, res: Response) {
 					sameSite: "lax",
 				};
 
-				return res.cookie("jwt", token, cookieOps).status(200).json({token});
+				return res.cookie("jwt", token, cookieOps).status(200).json({token, user});
 			}
 
 			return ResponseBuilder.NotFound(res, "Could not find user or wrong password");
