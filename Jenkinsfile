@@ -25,5 +25,6 @@ pipeline {
                 sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 sh "docker image rm ${DOCKER_IMAGE}:latest"
             }
+        }
     }
 }
