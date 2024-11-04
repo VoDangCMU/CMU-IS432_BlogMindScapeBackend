@@ -12,7 +12,7 @@ export default async function getPostByID(req: Request, res: Response) {
 		return ResponseBuilder.BadRequest(res, parsedPostID.error);
 	}
 	const postID = parsedPostID.data;
-	PostRepository.findOne({where: {id: postID}, relations: {user: true}, select: {user: {}}})
+	PostRepository.findOne({where: {id: postID}, relations: {user: true}})
 		.then(existedPost => {
 			if (!existedPost) return ResponseBuilder.NotFound(res, MessageCodes.POST_NOT_EXISTED);
 

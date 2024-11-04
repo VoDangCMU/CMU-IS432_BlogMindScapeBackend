@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
+                echo "Building Docker image: ${DOCKER_IMAGE}"
                 sh "docker build -t ${DOCKER_IMAGE} . "
                 withCredentials(
                     [usernamePassword(
@@ -17,7 +18,7 @@ pipeline {
                         sh "docker push ${DOCKER_IMAGE}"
                         sh "docker push ${DOCKER_IMAGE}:latest"
                     }
-
+                echo "Cleaning"
                 sh "docker image rm ${DOCKER_IMAGE}"
                 sh "docker image rm ${DOCKER_IMAGE}:latest"
             }
