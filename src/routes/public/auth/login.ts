@@ -38,9 +38,8 @@ export default async function (req: Request, res: Response) {
 
 				return res.cookie("jwt", token, cookieOps).status(200).json({token, user: loggedInUser});
 			}
-
-			return ResponseBuilder.NotFound(res, "Could not find user or wrong password");
 		}
+		return ResponseBuilder.NotFound(res, "Could not find user or wrong password");
 	} catch (e) {
 		log.error(e);
 		return ResponseBuilder.InternalServerError(res);
