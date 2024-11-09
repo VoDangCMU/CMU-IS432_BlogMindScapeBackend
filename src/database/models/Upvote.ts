@@ -4,7 +4,7 @@ import Post from "@models/Post";
 
 @Entity()
 export default class Upvote {
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({type: "bigint"})
 	id: number;
 
 	@ManyToOne(() => User, { onDelete: 'CASCADE' })

@@ -5,7 +5,7 @@ import Post from "@models/Post"
 @Unique('UNIQUE_USERNAME', ['username'])
 @Unique('UNIQUE_MAIL', ['mail'])
 export default class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({type: "bigint"})
     id: number
 
     @Column()
