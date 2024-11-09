@@ -2,10 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { decodeToken } from "@services/jwt";
 import ResponseBuilder from "@services/responseBuilder";
 import log from "@services/logger";
+import UserSessionRepository from "@database/repo/UserSessionRepository";
 
 export function isAuth(req: Request, res: Response, next: NextFunction) {
   log.info("Begin Authorization");
   if (req.cookies || req.headers.authorization) {
+		let userID: string = "",
+			sessionID: string = "";
     log.info("Detecting cookies and headers");
     // Cookie based
     if (req.cookies.jwt) {
@@ -15,8 +18,8 @@ export function isAuth(req: Request, res: Response, next: NextFunction) {
       const payload = decodeToken(req.cookies.jwt);
       if (payload) {
         log.info("Logged in with payload", payload);
-        req.headers["userID"] = payload;
-        return next();
+				userID = payload.userID as string;
+				sessionID = payload.sessionID as string;
       }
     }
 
@@ -27,15 +30,26 @@ export function isAuth(req: Request, res: Response, next: NextFunction) {
       const payload = decodeToken(req.headers.authorization);
       if (payload) {
         log.info("Logged in with payload", payload);
-        req.headers["userID"] = payload;
-        return next();
+	      userID = payload.userID as string;
+	      sessionID = payload.sessionID as string;
       }
     }
-  }
+	  req.headers.userID = userID;
+	  req.headers.sessionID = sessionID;
 
-  log.warn("Unauthorized");
-  return ResponseBuilder.Forbidden(
-    res,
-    "Please Login to access to this resource."
-  );
+		UserSessionRepository.findOneOrFail({
+			where: {id: sessionID},
+		})
+			.then((session) => {
+				if (session.id == sessionID) {
+					return next();
+				}
+			})
+			.catch((err) => {
+				return ResponseBuilder.Forbidden(
+					res,
+					"Invalid Session."
+				);
+			})
+  }
 }
