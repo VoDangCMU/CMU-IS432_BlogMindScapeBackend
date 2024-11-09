@@ -15,7 +15,7 @@ import Comment from "@models/Comment";
 
 @Entity()
 export default class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({type: "bigint"})
   id: number;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })

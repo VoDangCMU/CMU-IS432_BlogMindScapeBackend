@@ -10,7 +10,7 @@ import User from "@models/User";
 
 @Entity()
 export default class Comment {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({type: "bigint"})
   id: number;
 
   @Column()
