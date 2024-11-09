@@ -4,6 +4,7 @@ import ResponseBuilder from "@services/responseBuilder";
 import {compare} from "@services/hasher";
 import {signToken} from "@services/jwt";
 import {CookieOptions, Request, Response} from "express";
+import UserSessionRepository, {createSession} from "@database/repo/UserSessionRepository";
 
 export default async function (req: Request, res: Response) {
 	let parsed = USER_LOGIN_PARAMS_SCHEMA.safeParse(req.body);
@@ -20,7 +21,14 @@ export default async function (req: Request, res: Response) {
 		if (user) {
 			log.info(user)
 			if (compare(reqBody.password, user.password)) {
-				const token = signToken(user.id.toString());
+				const userSession = await createSession(user);
+				const token = signToken({
+					userID: user.id.toString(),
+					sessionID: userSession.id
+				});
+
+				log.info(userSession);
+				log.info(token);
 
 				let expiresDate = new Date();
 				expiresDate.setDate(expiresDate.getDate() + 7);
