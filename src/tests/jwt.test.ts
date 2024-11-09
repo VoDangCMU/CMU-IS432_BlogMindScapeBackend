@@ -1,7 +1,10 @@
-import {decodeToken, signToken} from '@services/jwt';
+import {decodeToken, ITokenPayload, signToken} from '@services/jwt';
 
 test('Sign and Decode token', () => {
-	const payload = '4';
+	const payload: ITokenPayload = {
+		sessionID: 'test',
+		userID: 'test',
+	};
 
 	const jwt = signToken(payload);
 	const decoded = decodeToken(jwt);
