@@ -3,6 +3,7 @@ import {logout} from "@routes/authed/user/logout";
 
 const user = Router();
 
+user.post('/:id', logout)
 user.post('/logout', logout)
 
 export default user;
