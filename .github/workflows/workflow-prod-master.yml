@@ -21,6 +21,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/blog/blog_backend
-            git pull
             pm2 restart blog_backend || pm2 start ./start.sh --name blog_backend
-            pm2 restart backend_staging || pm2 start ./start_staging.sh --name backend_staging
