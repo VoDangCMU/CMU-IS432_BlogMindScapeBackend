@@ -6,7 +6,7 @@ node {
     }
 
     stage('Build image') {
-        app = docker.build("realkhoa/backend")
+        app = docker.build("realkhoa/blog_backend")
     }
 
     stage('Push image') {
