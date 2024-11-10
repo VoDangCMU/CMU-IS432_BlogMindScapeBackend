@@ -8,8 +8,10 @@ pipeline {
     stages {
         stage('build') {
             agent {
-                label 'docker'
-                image 'node:22.8-slim'
+                docker {
+                    label 'docker'
+                    image 'node:22.8-slim'
+                }
             }
             steps {
                 echo "Building Docker image: ${DOCKER_IMAGE}"
