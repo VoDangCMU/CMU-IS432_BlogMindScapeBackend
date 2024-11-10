@@ -2,6 +2,9 @@ pipeline {
     agent { docker { image 'node:22.8-slim' } }
     environment {
         DOCKER_IMAGE = "${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+        tools {
+          'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'
+        }
     }
     stages {
         stage('build') {
