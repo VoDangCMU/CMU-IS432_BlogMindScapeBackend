@@ -1,18 +1,15 @@
 pipeline {
     agent { 
-        label 'docker'
+        docker {
+            label 'docker'
+            image 'node:22.8-slim'
+        }
     }
     environment {
         DOCKER_IMAGE = "${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
     }
     stages {
         stage('build') {
-            agent {
-                docker {
-                    label 'docker'
-                    image 'node:22.8-slim'
-                }
-            }
             steps {
                 echo "Building Docker image: ${DOCKER_IMAGE}"
                 sh "docker build -t ${DOCKER_IMAGE} . "
