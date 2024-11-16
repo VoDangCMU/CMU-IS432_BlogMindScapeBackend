@@ -14,7 +14,7 @@ export const AppDataSourceOptions: DataSourceOptions = {
   logging: (env.ENV !== "production" && env.ENV !== "testing"),
   entities: [__dirname + "/models/*.{js,ts}"],
   subscribers: [],
-  migrations: [],
+  migrations: [__dirname + "/migrations/*.{js,ts}"],
 
 }
 
