@@ -4,7 +4,7 @@ import ResponseBuilder from "@services/responseBuilder";
 import {compare} from "@services/hasher";
 import {signToken} from "@services/jwt";
 import {CookieOptions, Request, Response} from "express";
-import UserSessionRepository, {createSession} from "@database/repo/UserSessionRepository";
+import UserSessionRepository, {createSession, pruneOldSession} from "@database/repo/UserSessionRepository";
 
 export default async function (req: Request, res: Response) {
 	let parsed = USER_LOGIN_PARAMS_SCHEMA.safeParse(req.body);
@@ -43,6 +43,12 @@ export default async function (req: Request, res: Response) {
 				})
 
 				log.info(loggedInUser)
+
+				log.info("Pruning old session");
+				pruneOldSession(user.id)
+					.catch(err => {
+						log.error(err);
+					})
 
 				return res.cookie("jwt", token, cookieOps).status(200).json({token, user: loggedInUser});
 			}

@@ -1,6 +1,7 @@
 import {AppDataSource} from "@database/DataSource";
 import {UserSession} from "@models/UserSession";
 import User from "@models/User";
+import {Raw} from "typeorm";
 
 const UserSessionRepository = AppDataSource.getRepository(UserSession);
 
@@ -18,6 +19,16 @@ export async function createSession(user: User) {
 	await UserSessionRepository.save(userSession);
 
 	return userSession;
+}
+
+export async function pruneOldSession(userID: number) {
+	const sessions = await UserSessionRepository
+		.createQueryBuilder()
+		.innerJoin("user", "user")
+		.where("user.id = :id", {id: userID})
+		.andWhere(`(SELECT EXTRACT(DAY FROM NOW() - expiredOn)) > 7`)
+		.delete()
+		.execute();
 }
 
 export default  UserSessionRepository;
