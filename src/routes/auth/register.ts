@@ -1,10 +1,10 @@
-import UserRepository, {createUser, isUserNotExisted, USER_CREATE_SCHEMA} from "@database/repo/UserRepository";
+import UserRepository, {createUser, USER_CREATE_SCHEMA} from "@database/repo/UserRepository";
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
 import MessageCodes from "@root/messageCodes";
-import {Response, Request} from "express";
+import {Request, Response} from "express";
 
-export default async function(req: Request, res: Response) {
+export default async function (req: Request, res: Response) {
 	const parsed = USER_CREATE_SCHEMA.safeParse(req.body);
 
 	if (parsed.error) {
