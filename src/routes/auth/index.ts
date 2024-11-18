@@ -1,6 +1,6 @@
 import {Router} from "express";
-import register from "@routes/public/auth/register";
-import login from "@routes/public/auth/login";
+import register from "@routes/auth/register";
+import login from "@routes/auth/login";
 
 const auth = Router();
 

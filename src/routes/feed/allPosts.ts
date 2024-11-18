@@ -17,7 +17,7 @@ export default async function getAllPosts(req: Request, res: Response) {
 
     try {
         const postInPage = await PostRepository.find({
-            order:{id : "DESC"},
+            order:{createdAt : "DESC"},
             skip: page * pageSize,
             take: pageSize,
             relations:{ user: true }

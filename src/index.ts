@@ -45,36 +45,14 @@ app.get("/hello", (req, res) => {
 }); // This endpoint only for health checking
 
 AppDataSource.initialize().then(() => {
-	// Public router before this middleware
-	const publicRouterPath = path.resolve(__dirname, "routes", "public");
-	const publicRouter: Array<string> = fs.readdirSync(publicRouterPath);
+	const routesPath = path.resolve(__dirname, "routes");
+	const routes: Array<string> = fs.readdirSync(routesPath)
+		.filter((e) => !(e.includes(".js") || e.includes(".ts")));
 
-	for (const router of publicRouter) {
-		const req_router = require(`./routes/public/${router}/index`);
-
+	for (const router of routes) {
+		const req_router = require(`./routes/${router}/index`);
 		app.use(`/${router}`, req_router);
 	}
-
-	// For http testing
-	const testOnlyRouterPath = path.resolve(__dirname, "routes", "test_only");
-	const testOnlyRouter: Array<string> = fs.readdirSync(testOnlyRouterPath);
-
-	for (const router of testOnlyRouter) {
-		const req_router = require(`./routes/test_only/${router}/index`);
-		app.use(`/${router}`, req_router);
-	}
-
-	app.use(isAuth);
-
-	// Authed router
-	const authedRouterPath = path.resolve(__dirname, "routes", "authed");
-	const authedRouter: Array<string> = fs.readdirSync(authedRouterPath);
-
-	for (const router of authedRouter) {
-		const req_router = require(`./routes/authed/${router}/index`);
-		app.use(`/${router}`, req_router);
-	}
-
 	// 404
 	app.use("*", notfound);
 

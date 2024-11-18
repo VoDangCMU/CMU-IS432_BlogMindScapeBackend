@@ -17,7 +17,6 @@ export function isAuth(req: Request, res: Response, next: NextFunction) {
 
       const payload = decodeToken(req.cookies.jwt);
       if (payload) {
-        log.info("Logged in with payload", payload);
 				userID = payload.userID as string;
 				sessionID = payload.sessionID as string;
       }
@@ -29,7 +28,6 @@ export function isAuth(req: Request, res: Response, next: NextFunction) {
       log.info("Begin decoding");
       const payload = decodeToken(req.headers.authorization);
       if (payload) {
-        log.info("Logged in with payload", payload);
 	      userID = payload.userID as string;
 	      sessionID = payload.sessionID as string;
       }
@@ -39,11 +37,13 @@ export function isAuth(req: Request, res: Response, next: NextFunction) {
 
 		UserSessionRepository.findOneOrFail({
 			where: {id: sessionID},
+			relations: {
+				user: true
+			}
 		})
 			.then((session) => {
-				if (session.id == sessionID) {
-					return next();
-				}
+				log.info("Logged in as ", session.user);
+				return next();
 			})
 			.catch((err) => {
 				return ResponseBuilder.Forbidden(
