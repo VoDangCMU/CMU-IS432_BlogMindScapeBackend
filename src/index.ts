@@ -5,13 +5,12 @@ import cors, {CorsOptions} from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import {AppDataSource} from "./database/DataSource";
-import {isAuth} from "./middlewares/isAuth";
 import env from "./env";
 import notfound from "./routes/[404]";
 import log from "@services/logger";
 import morgan from "morgan";
 
-log.info("Starting Application");
+log.status("Starting Application");
 
 const app = express();
 
@@ -57,7 +56,7 @@ AppDataSource.initialize().then(() => {
 	app.use("*", notfound);
 
 	app.listen(env.APPLICATION_PORT, () => {
-		log.error(
+		log.status(
 			`Application Start at PORT ${env.APPLICATION_PORT}\tENV=${env.ENV}\tURL=http://127.0.0.1:${env.APPLICATION_PORT}`
 		);
 	});
