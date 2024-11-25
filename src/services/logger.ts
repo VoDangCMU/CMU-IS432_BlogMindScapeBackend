@@ -1,12 +1,13 @@
 import chalk from "chalk";
 import env from "@root/env";
 
-type LogLevel = "info" | "warn" | "error";
+type LogLevel = "info" | "warn" | "error" | "status";
 
 const prefix = {
 	info: chalk.bgBlue.bold.green(" INFO "),
 	warn: chalk.bgYellow.bold.black(" WARN "),
 	error: chalk.bgRed.bold.blue(" ERROR "),
+	status: chalk.bgMagenta.bold.white(" STATUS "),
 };
 
 const log = {
@@ -23,6 +24,10 @@ const log = {
 
 	error(...data: any[]) {
 		console.log(prefix['error'], ...data);
+	},
+
+	status(...data: any[]) {
+		console.log(prefix['status'], ...data);
 	}
 }
 

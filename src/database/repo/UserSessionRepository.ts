@@ -1,7 +1,6 @@
 import {AppDataSource} from "@database/DataSource";
 import {UserSession} from "@models/UserSession";
 import User from "@models/User";
-import {Raw} from "typeorm";
 
 const UserSessionRepository = AppDataSource.getRepository(UserSession);
 
@@ -31,4 +30,4 @@ export async function pruneOldSession(userID: number) {
 		.execute();
 }
 
-export default  UserSessionRepository;
+export default UserSessionRepository;

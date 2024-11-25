@@ -35,3 +35,5 @@ docker build -t blog_backend .
 ```
 
 This image expose at port 5000.  
+
+## Migration
