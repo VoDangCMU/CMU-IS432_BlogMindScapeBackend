@@ -3,7 +3,6 @@ import {AppDataSource} from "@database/DataSource";
 import {z} from "zod";
 import {BOOLEAN, DATE, MAIL, NUMBER, STRING} from "@database/repo/CommonSchemas";
 import {hash} from "@services/hasher";
-import {FindManyOptions, FindOneOptions} from "typeorm";
 import MessageCodes from "@root/messageCodes";
 
 const UserRepository = AppDataSource.getRepository(User);
