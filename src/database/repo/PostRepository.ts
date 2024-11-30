@@ -49,7 +49,7 @@ export async function createPost(
 
 	await PostRepository.save(createdPost);
 
-	return POST_SCHEMA.parse(createdPost);
+	return createdPost;
 }
 
 export default PostRepository;

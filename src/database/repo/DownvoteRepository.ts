@@ -4,7 +4,7 @@ import User from "@models/User";
 import Post from "@models/Post";
 import Downvote from "@models/Downvote";
 
-const DownvoteRepository = AppDataSource.getRepository(Upvote);
+const DownvoteRepository = AppDataSource.getRepository(Downvote);
 
 export async function createDownvote(user: User, post: Post) {
 	const downvote = new Downvote();
