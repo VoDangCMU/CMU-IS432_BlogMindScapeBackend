@@ -37,5 +37,5 @@ export default class Post {
   comments: Array<Comment>;
 
   @CreateDateColumn()
-  createdAt: Date;
+  public createdAt: Date;
 }

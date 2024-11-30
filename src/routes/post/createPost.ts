@@ -17,7 +17,7 @@ export default function _createPost(req: Request, res: Response) {
 	createPost(reqBody, userID)
 		.then(createdPost => {
 			log.info(createdPost);
-			return ResponseBuilder.Ok(res, POST_SCHEMA.parse(createdPost));
+			return ResponseBuilder.Ok(res, createdPost);
 		})
 		.catch(err => {
 			log.warn(err);

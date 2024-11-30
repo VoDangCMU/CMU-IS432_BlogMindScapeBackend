@@ -11,6 +11,7 @@ import log from "@services/logger";
 import morgan from "morgan";
 
 log.status("Starting Application");
+log.status("Configuring routes");
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.get("/hello", (req, res) => {
 	res.json({message: "world"});
 }); // This endpoint only for health checking
 
+log.status("Initializing Database");
 AppDataSource.initialize().then(() => {
 	const routesPath = path.resolve(__dirname, "routes");
 	const routes: Array<string> = fs.readdirSync(routesPath)
