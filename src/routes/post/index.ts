@@ -5,6 +5,7 @@ import {isAuth} from "@root/middlewares/isAuth";
 import {getPostByID, getPostComments, getPostDownvotes, getPostUpvotes} from "@routes/post/getPost";
 import {downvotePost, updatePost, upvotePost} from "@routes/post/updatePost";
 import {_deletePost, unDownvotePost, unUpvotePost} from "@routes/post/deletePost";
+import {getVoteStatus, isDownvoted, isUpvoted} from "@routes/post/postStatus";
 
 const post = Router();
 
@@ -22,6 +23,10 @@ post.delete("/downvote/:id", unDownvotePost);
 post.get("/comments/:postId", getPostComments);
 post.get("/upvotes/:postId", getPostUpvotes);
 post.get("/downvotes/:postId", getPostDownvotes);
+
+post.get("/status/upvote/:id", isUpvoted);
+post.get("/status/downvote/:id", isDownvoted);
+post.get("/status/vote/:id", getVoteStatus);
 
 export default post;
 module.exports = post;

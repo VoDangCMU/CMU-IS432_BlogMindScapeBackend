@@ -80,6 +80,7 @@ export async function unDownvotePost(req: Request, res: Response) {
 
 		if (!existedDownvote) return ResponseBuilder.BadRequest(res, MessageCodes.NOT_DOWNVOTE_YET);
 
+		await DownvoteRepository.delete(existedDownvote)
 		existedPost.downvote--;
 		await PostRepository.save(existedPost);
 
