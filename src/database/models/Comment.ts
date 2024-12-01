@@ -21,9 +21,6 @@ export default class Comment {
   @Column({ nullable: true })
   attachment: string;
 
-  @CreateDateColumn()
-  issueAt: Date;
-
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 
