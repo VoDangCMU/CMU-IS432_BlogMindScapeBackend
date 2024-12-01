@@ -43,7 +43,12 @@
     "start": "node ./dist/src/index.js",
     "test": "cross-env ENV=testing jest",
     "test-server": "cross-env ENV=testing ts-node -r tsconfig-paths/register ./src/index.ts",
-    "build": "tsc --build tsconfig.json && tsc-alias"
+    "build": "tsc --build tsconfig.json && tsc-alias",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:create": "ts-node ./src/runner/migration_create.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/database/DataSource.ts",
+    "migration:show": "typeorm-ts-node-commonjs migration:show -d ./src/database/DataSource.ts",
+    "migration:generate": "ts-node ./src/runner/migration_generate.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",

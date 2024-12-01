@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import env from "@root/env";
+import env from "../env";
 
 type LogLevel = "info" | "warn" | "error" | "status";
 
