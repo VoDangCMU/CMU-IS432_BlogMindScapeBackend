@@ -38,6 +38,11 @@ This image expose at port 5000.
 
 ## Migration
 
+### TL;DR
+Modify or create new entity in [models](./src/database/models) folder. Then run `yarn migration:generate <migrationName>` to generate new migration.  
+After that, you can exec `yarn migration:run` to apply changes to database.  
+Enjoy!  
+
 ### Create new migration
 
 ```bash
@@ -48,6 +53,15 @@ For example:
 ```bash
   yarn migration:create addCreatedAtToComment
 ```
+
+### Generate new migration from entities changes
+You can use this command to quickly create migration from entities change in [models](./src/database/models) folder:
+```bash
+  yarn migration:generate <migrationName>
+```
+
+This command will create new migration in [migrations](./src/database/migrations) folder.  
+
 ## Context
 
 ### UserID and SessionID
