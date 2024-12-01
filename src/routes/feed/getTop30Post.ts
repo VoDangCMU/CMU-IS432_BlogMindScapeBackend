@@ -12,7 +12,6 @@ export default async function getTop30Post(req: Request, res: Response) {
         })
 
         log.info(top30);
-
         return ResponseBuilder.Ok(res, top30);
     } catch (error) {
         log.error(error);
