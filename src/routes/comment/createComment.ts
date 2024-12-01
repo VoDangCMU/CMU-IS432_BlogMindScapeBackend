@@ -1,9 +1,6 @@
 import {Request, Response} from "express";
-import {AppDataSource} from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
 import log from "@services/logger";
-import Post from "@models/Post";
-import User from "@models/User";
 import Comment from "@models/Comment";
 import NUMBER from "@database/DataSchema/NUMBER";
 import {z} from "zod";
