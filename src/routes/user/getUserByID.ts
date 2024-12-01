@@ -1,14 +1,14 @@
 import {Request, Response} from "express";
-import C from "@database/repo/CommonSchemas";
 import ResponseBuilder from "@services/responseBuilder";
 import UserRepository from "@database/repo/UserRepository";
 import MessageCodes from "@root/messageCodes";
 import log from "@services/logger";
+import NUMBER from "@database/DataSchema/NUMBER";
 
 export default function (req: Request, res: Response) {
 	const _userID = req.params.id;
 
-	const parsed = C.NUMBER.safeParse(_userID);
+	const parsed = NUMBER.safeParse(_userID);
 
 	if (parsed.error) {
 		return ResponseBuilder.BadRequest(res, parsed.error);

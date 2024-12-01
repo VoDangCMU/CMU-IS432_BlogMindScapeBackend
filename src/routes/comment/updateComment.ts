@@ -1,19 +1,23 @@
 import {Request, Response} from "express";
-import {AppDataSource} from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
-import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import Comment from "@models/Comment";
-import {COMMENT_SCHEMA, COMMENT_UPDATE_SCHEMA} from "@database/repo/CommentRepository";
+import NUMBER from "@database/DataSchema/NUMBER";
+import CommentRepository from "@database/repo/CommentRepository";
+import STRING from "@database/DataSchema/STRING";
+import {z} from "zod";
 
-const commentRepository = AppDataSource.getRepository(Comment);
+const CommentUpdateDataParser = z.object({
+	body: STRING.optional(),
+	attachment: STRING.url().optional(),
+	id: NUMBER
+})
 
 export default async function updateComment(req: Request, res: Response) {
 	let reqBody, userID;
 
 	try {
-		reqBody = COMMENT_UPDATE_SCHEMA.parse(req.body);
-		userID = C.NUMBER.parse(req.headers["userID"]);
+		reqBody = CommentUpdateDataParser.parse(req.body);
+		userID = NUMBER.parse(req.headers["userID"]);
 	} catch (e) {
 		log.warn(e);
 		return ResponseBuilder.BadRequest(res, e);
@@ -21,15 +25,11 @@ export default async function updateComment(req: Request, res: Response) {
 
 	try {
 		log.info(reqBody);
-		const existedComment = await commentRepository.findOne({
-			where: {
-				id: reqBody.id,
-			},
+		const existedComment = await CommentRepository.findOne({
+			where: {id: reqBody.id,},
 			relations: {
 				user: true,
-				post: {
-					user: true,
-				},
+				post: {user: true,},
 			},
 		});
 
@@ -40,9 +40,9 @@ export default async function updateComment(req: Request, res: Response) {
 		if (existedComment.user.id != userID)
 			return ResponseBuilder.Forbidden(res, "NOT_OWN_COMMENT");
 
-		await commentRepository.update(reqBody.id, reqBody);
+		await CommentRepository.update(reqBody.id, reqBody);
 
-		const updatedComment = await commentRepository.findOne({
+		const updatedComment = await CommentRepository.findOne({
 			where: {id: reqBody.id},
 		});
 
@@ -50,7 +50,7 @@ export default async function updateComment(req: Request, res: Response) {
 
 		return ResponseBuilder.Ok(
 			res,
-			COMMENT_SCHEMA.parse(updatedComment)
+			updatedComment!
 		);
 	} catch (e) {
 		log.error(e);

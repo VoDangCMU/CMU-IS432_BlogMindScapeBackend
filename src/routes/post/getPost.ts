@@ -3,14 +3,14 @@ import ResponseBuilder from "@services/responseBuilder";
 import log from "@services/logger";
 import PostRepository from "@database/repo/PostRepository";
 import MessageCodes from "@root/messageCodes";
-import C from "@database/repo/CommonSchemas";
 import CommentRepository from "@database/repo/CommentRepository";
 import DownvoteRepository from "@database/repo/DownvoteRepository";
 import UpvoteRepository from "@database/repo/UpvoteRepository";
+import NUMBER from "@database/DataSchema/NUMBER";
 
 export async function getPostByID(req: Request, res: Response) {
 	log.info(__filename)
-	const parsedPostID = C.NUMBER.safeParse(req.params.id);
+	const parsedPostID = NUMBER.safeParse(req.params.id);
 
 	if (parsedPostID.error) {
 		log.warn(parsedPostID.error)
@@ -33,7 +33,7 @@ export async function getPostByID(req: Request, res: Response) {
 export async function getPostComments(req: Request, res: Response) {
 	let postID;
 
-	const parsedPostId = C.NUMBER.safeParse(req.params.postId);
+	const parsedPostId = NUMBER.safeParse(req.params.postId);
 
 	if (parsedPostId.error) {
 		log.warn(parsedPostId.error);
@@ -59,7 +59,7 @@ export async function getPostComments(req: Request, res: Response) {
 export async function getPostDownvotes(req: Request, res: Response) {
 	let postID;
 
-	const parsedPostId = C.NUMBER.safeParse(req.params.postId);
+	const parsedPostId = NUMBER.safeParse(req.params.postId);
 
 	if (parsedPostId.error) {
 		log.warn(parsedPostId.error);
@@ -91,7 +91,7 @@ export async function getPostDownvotes(req: Request, res: Response) {
 export async function getPostUpvotes(req: Request, res: Response) {
 	let postID;
 
-	const parsedPostId = C.NUMBER.safeParse(req.params.postId);
+	const parsedPostId = NUMBER.safeParse(req.params.postId);
 
 	if (parsedPostId.error) {
 		log.warn(parsedPostId.error);

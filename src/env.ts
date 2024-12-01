@@ -1,6 +1,7 @@
 import {z} from "zod";
 import {config} from "dotenv";
-import C, {NUMBER, STRING} from "./database/repo/CommonSchemas";
+import STRING from "./database/DataSchema/STRING";
+import NUMBER from "./database/DataSchema/NUMBER";
 
 config();
 
@@ -27,7 +28,7 @@ const envSchema = z.object({
 	DB_PASSWORD: STRING,
 	DB_DATABASE: STRING,
 	SALT_ROUND: NUMBER,
-	APPLICATION_PORT: C.NUMBER.optional(),
+	APPLICATION_PORT: NUMBER.optional(),
 });
 
 const env = envSchema.parse(process.env);

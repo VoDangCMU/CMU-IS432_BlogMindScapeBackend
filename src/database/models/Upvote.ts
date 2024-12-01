@@ -1,8 +1,10 @@
 import {Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import User from "@models/User";
-import Post from "@models/Post";
+import User from "./User";
+import Post from "./Post";
 
-@Entity()
+export const UpvoteTableName = "upvote";
+
+@Entity({name: UpvoteTableName})
 export default class Upvote {
 	@PrimaryGeneratedColumn({type: "bigint"})
 	id: number;

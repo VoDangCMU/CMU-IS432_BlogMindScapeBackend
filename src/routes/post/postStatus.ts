@@ -1,10 +1,9 @@
 import {Request, Response} from "express";
-import {NUMBER} from "@database/repo/CommonSchemas";
 import ResponseBuilder from "@services/responseBuilder";
 import UpvoteRepository from "@database/repo/UpvoteRepository";
 import log from "@services/logger";
 import DownvoteRepository from "@database/repo/DownvoteRepository";
-import PostRepository from "@database/repo/PostRepository";
+import NUMBER from "@database/DataSchema/NUMBER";
 
 export async function isUpvoted(req: Request, res: Response) {
 	const _postID = req.params.id;
@@ -16,23 +15,23 @@ export async function isUpvoted(req: Request, res: Response) {
 		return ResponseBuilder.BadRequest(res, parsed.error);
 	}
 
-		const postID = parsed.data;
+	const postID = parsed.data;
 
-		UpvoteRepository.findOne({
-			where: {
-				post: {id: postID},
-				user: {id: userID}
-			}
+	UpvoteRepository.findOne({
+		where: {
+			post: {id: postID},
+			user: {id: userID}
+		}
+	})
+		.then((existedUpvote) => {
+			if (!existedUpvote)
+				return ResponseBuilder.Ok(res, {isUpvoted: false})
+			return ResponseBuilder.Ok(res, {isUpvoted: true})
 		})
-			.then((existedUpvote) => {
-				if (!existedUpvote)
-					return ResponseBuilder.Ok(res, {isUpvoted: false})
-				return ResponseBuilder.Ok(res, {isUpvoted: true})
-			})
-			.catch(err => {
-				log.error(err);
-				return ResponseBuilder.InternalServerError(res);
-			})
+		.catch(err => {
+			log.error(err);
+			return ResponseBuilder.InternalServerError(res);
+		})
 }
 
 export async function isDownvoted(req: Request, res: Response) {
