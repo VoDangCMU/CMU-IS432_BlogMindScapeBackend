@@ -20,6 +20,7 @@ export default async function getAllPostsByPage(req: Request, res: Response) {
         log.warn(`Page ${page + 1} exceeds total pages ${totalPage}`);
         return ResponseBuilder.BadRequest(res, `Page ${page + 1} exceeds total pages ${totalPage}`);
     }
+
     try {
         const postInPage = await PostRepository.find({
             order: {createdAt: "DESC"},
