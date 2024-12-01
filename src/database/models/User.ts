@@ -1,25 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, JoinColumn, ManyToMany, JoinTable } from "typeorm"
-import Post from "@models/Post"
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm"
 
-@Entity()
+export const UserTableName = "user";
+
+@Entity({name: UserTableName})
 @Unique('UNIQUE_USERNAME', ['username'])
 @Unique('UNIQUE_MAIL', ['mail'])
 export default class User {
-    @PrimaryGeneratedColumn({type: "bigint"})
-    id: number
+	@PrimaryGeneratedColumn({type: "bigint"})
+	id: number
 
-    @Column()
-    username: string
+	@Column()
+	username: string
 
-    @Column()
-    mail: string
+	@Column()
+	mail: string
 
-    @Column()
-    fullname: string
+	@Column()
+	fullname: string
 
-    @Column()
-    dateOfBirth: Date
+	@Column()
+	dateOfBirth: Date
 
-    @Column({select: false})
-    password: string
+	@Column({select: false})
+	password: string
 }

@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import PostRepository from "@database/repo/PostRepository";
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
-import {NUMBER} from "@database/repo/CommonSchemas";
+import NUMBER from "@database/DataSchema/NUMBER";
 
 export default async function getAllPostsByPage(req: Request, res: Response) {
     const parsedPage = NUMBER.optional().safeParse(req.params.page);

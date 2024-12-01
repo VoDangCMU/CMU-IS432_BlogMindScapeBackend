@@ -1,5 +1,4 @@
 import {AppDataSource} from "@database/DataSource";
-import Upvote from "@models/Upvote";
 import User from "@models/User";
 import Post from "@models/Post";
 import Downvote from "@models/Downvote";

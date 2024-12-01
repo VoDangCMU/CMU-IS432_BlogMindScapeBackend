@@ -38,6 +38,16 @@ This image expose at port 5000.
 
 ## Migration
 
+### Create new migration
+
+```bash
+  yarn migration:create <MigrationName>
+```
+
+For example:
+```bash
+  yarn migration:create addCreatedAtToComment
+```
 ## Context
 
 ### UserID and SessionID

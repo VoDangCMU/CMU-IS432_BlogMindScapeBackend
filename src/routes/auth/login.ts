@@ -1,10 +1,17 @@
-import UserRepository, {getUserByEmailOrUsername, USER_LOGIN_PARAMS_SCHEMA} from "@database/repo/UserRepository";
+import UserRepository from "@database/repo/UserRepository";
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
 import {compare} from "@services/hasher";
 import {signToken} from "@services/jwt";
 import {CookieOptions, Request, Response} from "express";
 import {createSession, pruneOldSession} from "@database/repo/UserSessionRepository";
+import {z} from "zod";
+
+export const LoginCredentialsParser = z.object({
+	username: z.string(),
+	password: z.string(),
+	keepLogin: z.union([z.string(), z.boolean()]),
+})
 
 function getTokenExpiredDate() {
 	let expiresDate = new Date();
@@ -14,22 +21,28 @@ function getTokenExpiredDate() {
 }
 
 export default async function (req: Request, res: Response) {
-	let parsed = USER_LOGIN_PARAMS_SCHEMA.safeParse(req.body);
+	let parsed = LoginCredentialsParser.safeParse(req.body);
 
 	if (parsed.error) {
 		log.warn(parsed.error);
 		return ResponseBuilder.BadRequest(res, parsed.error);
 	}
 
+	const credentials = parsed.data;
+
 	try {
-		const reqBody = parsed.data;
-		const user = await getUserByEmailOrUsername(reqBody?.username);
+		const user = await UserRepository.findOne({
+			where: [
+				{username: credentials.username},
+				{mail: credentials.username},
+			],
+			select: {username: true, password: true, id: true}
+		});
 
 		// Invalid username or password
-		if (!user || !compare(reqBody.password, user.password))
+		if (!user || !compare(credentials.password, user.password))
 			return ResponseBuilder.BadRequest(res, "Incorrect username or password");
 
-		log.info(user)
 		const userSession = await createSession(user);
 		const token = signToken({
 			userID: user.id.toString(),
@@ -37,12 +50,12 @@ export default async function (req: Request, res: Response) {
 		});
 
 		log.info(userSession);
-		log.info(token);
+		log.info("token", token);
 
 		const expiresDate = getTokenExpiredDate();
 
 		const cookieOps: CookieOptions = {
-			expires: reqBody.keepLogin ? expiresDate : undefined,
+			expires: credentials.keepLogin ? expiresDate : undefined,
 			sameSite: "lax",
 		};
 
@@ -51,7 +64,6 @@ export default async function (req: Request, res: Response) {
 		})
 
 		log.info(loggedInUser)
-
 		log.info("Pruning old session");
 		await pruneOldSession(user.id);
 

@@ -1,16 +1,24 @@
 import {Request, Response} from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import PostRepository, {POST_SCHEMA, POST_UPDATE_SCHEMA,} from "@database/repo/PostRepository";
+import PostRepository from "@database/repo/PostRepository";
 import UserRepository from "@database/repo/UserRepository";
 import DownvoteRepository, {createDownvote} from "@database/repo/DownvoteRepository";
 import UpvoteRepository, {createUpvote} from "@database/repo/UpvoteRepository";
 import MessageCodes from "@root/messageCodes";
+import NUMBER from "@database/DataSchema/NUMBER";
+import STRING from "@database/DataSchema/STRING";
+import {z} from "zod";
+
+const PostUpdateDataParser = z.object({
+	id: NUMBER,
+	title: STRING.optional(),
+	body: STRING.optional(),
+})
 
 export async function downvotePost(req: Request, res: Response) {
-	const parsedPostID = C.NUMBER.safeParse(req.params.id);
-	const parsedUserID = C.NUMBER.safeParse(req.headers["userID"]);
+	const parsedPostID = NUMBER.safeParse(req.params.id);
+	const parsedUserID = NUMBER.safeParse(req.headers["userID"]);
 
 	if (parsedPostID.error) {
 		log.warn(parsedPostID.error);
@@ -63,7 +71,7 @@ export async function downvotePost(req: Request, res: Response) {
 		existedPost.downvote++;
 
 		await PostRepository.save(existedPost);
-		return ResponseBuilder.Ok(res, POST_SCHEMA.parse(existedPost));
+		return ResponseBuilder.Ok(res, existedPost);
 	} catch (e) {
 		log.error(e);
 		return ResponseBuilder.InternalServerError(res, e);
@@ -74,8 +82,8 @@ export async function updatePost(req: Request, res: Response) {
 	let reqBody, userID;
 
 	try {
-		reqBody = POST_UPDATE_SCHEMA.parse(req.body);
-		userID = C.NUMBER.parse(req.headers["userID"]);
+		reqBody = PostUpdateDataParser.parse(req.body);
+		userID = NUMBER.parse(req.headers["userID"]);
 	} catch (e) {
 		log.warn(e);
 		return ResponseBuilder.BadRequest(res, e);
@@ -85,7 +93,7 @@ export async function updatePost(req: Request, res: Response) {
 
 	try {
 		const existedPost = await PostRepository.findOne({
-			where: { id: reqBody.id },
+			where: {id: reqBody.id},
 			relations: {user: true}
 		});
 
@@ -95,18 +103,14 @@ export async function updatePost(req: Request, res: Response) {
 		if (existedPost.user.id != userID)
 			return ResponseBuilder.Forbidden(res, "NOT_OWN_POST");
 
-		existedPost.upvote++;
+		existedPost.title = reqBody.title ? reqBody.title : existedPost.title;
+		existedPost.body = reqBody.body ? reqBody.body : existedPost.body;
 
 		await PostRepository.save(existedPost);
 
-		const updatedPost = await PostRepository.findOne({
-			where: { id: reqBody.id },
-			relations: { user: true },
-		});
-
 		return ResponseBuilder.Ok(
 			res,
-			POST_SCHEMA.parse(updatedPost!)
+			existedPost!
 		);
 	} catch (e) {
 		log.error(e);
@@ -118,7 +122,7 @@ export async function upvotePost(req: Request, res: Response) {
 	let postID, userID;
 
 	try {
-		postID = C.NUMBER.parse(req.params.id);
+		postID = NUMBER.parse(req.params.id);
 		userID = parseInt(req.headers["userID"] as string, 10);
 	} catch (e) {
 		log.warn(e);
@@ -165,7 +169,7 @@ export async function upvotePost(req: Request, res: Response) {
 		await PostRepository.save(existedPost);
 		return ResponseBuilder.Ok(
 			res,
-			POST_SCHEMA.parse(existedPost)
+			existedPost
 		);
 	} catch (e) {
 		log.error(e);

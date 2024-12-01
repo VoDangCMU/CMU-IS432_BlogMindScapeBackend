@@ -5,10 +5,12 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from "typeorm";
-import Post from "@models/Post";
-import User from "@models/User";
+import Post from "./Post";
+import User from "./User";
 
-@Entity()
+export const CommentTableName = "comment";
+
+@Entity({name: CommentTableName})
 export default class Comment {
   @PrimaryGeneratedColumn({type: "bigint"})
   id: number;
@@ -27,4 +29,7 @@ export default class Comment {
 
   @ManyToOne(() => Post, { onDelete: "CASCADE" })
   post: Post;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

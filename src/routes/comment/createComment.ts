@@ -1,31 +1,37 @@
 import {Request, Response} from "express";
 import {AppDataSource} from "@database/DataSource";
 import ResponseBuilder from "@services/responseBuilder";
-import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
 import Post from "@models/Post";
 import User from "@models/User";
 import Comment from "@models/Comment";
-import {COMMENT_CREATE_SCHEMA, COMMENT_SCHEMA} from "@database/repo/CommentRepository";
+import NUMBER from "@database/DataSchema/NUMBER";
+import {z} from "zod";
+import STRING from "@database/DataSchema/STRING";
+import UserRepository from "@database/repo/UserRepository";
+import PostRepository from "@database/repo/PostRepository";
+import CommentRepository from "@database/repo/CommentRepository";
 
-const postRepository = AppDataSource.getRepository(Post);
-const userRepository = AppDataSource.getRepository(User);
-const commentRepository = AppDataSource.getRepository(Comment);
+const CommentCreationDataParser = z.object({
+	body: STRING,
+	attachment: STRING,
+	postID: NUMBER
+})
 
 export default async function createComment(req: Request, res: Response) {
 	let reqBody, userID;
 
 	try {
-		reqBody = COMMENT_CREATE_SCHEMA.parse(req.body);
-		userID = C.NUMBER.parse(req.headers["userID"]);
+		reqBody = CommentCreationDataParser.parse(req.body);
+		userID = NUMBER.parse(req.headers["userID"]);
 	} catch (e) {
 		log.warn(e);
 		return ResponseBuilder.BadRequest(res, e);
 	}
 
 	try {
-		const user = await userRepository.findOne({where: {id: userID}});
-		const post = await postRepository.findOne({
+		const user = await UserRepository.findOne({where: {id: userID}});
+		const post = await PostRepository.findOne({
 			where: {id: reqBody.postID},
 		});
 
@@ -39,13 +45,13 @@ export default async function createComment(req: Request, res: Response) {
 		createdComment.user = user;
 		createdComment.post = post;
 
-		await commentRepository.save(createdComment);
+		await CommentRepository.save(createdComment);
 
 		log.info(createdComment);
 
 		return ResponseBuilder.Ok(
 			res,
-			COMMENT_SCHEMA.parse(createdComment)
+			createdComment
 		);
 	} catch (e) {
 		log.error(e);

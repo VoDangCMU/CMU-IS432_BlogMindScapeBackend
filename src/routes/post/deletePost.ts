@@ -1,16 +1,16 @@
 import {Request, Response} from "express";
 import ResponseBuilder from "@services/responseBuilder";
-import C from "@database/repo/CommonSchemas";
 import log from "@services/logger";
-import PostRepository, {POST_SCHEMA} from "@database/repo/PostRepository";
+import PostRepository from "@database/repo/PostRepository";
 import MessageCodes from "@root/messageCodes";
 import UserRepository from "@database/repo/UserRepository";
 import DownvoteRepository from "@database/repo/DownvoteRepository";
 import UpvoteRepository from "@database/repo/UpvoteRepository";
+import NUMBER from "@database/DataSchema/NUMBER";
 
 export function _deletePost(req: Request, res: Response) {
-	const parsedPostID = C.NUMBER.safeParse(req.params.id);
-	const parsedUserID = C.NUMBER.safeParse(req.headers["userID"]);
+	const parsedPostID = NUMBER.safeParse(req.params.id);
+	const parsedUserID = NUMBER.safeParse(req.headers["userID"]);
 
 	if (parsedPostID.error) {
 		log.warn(parsedPostID.error);
@@ -42,8 +42,8 @@ export function _deletePost(req: Request, res: Response) {
 }
 
 export async function unDownvotePost(req: Request, res: Response) {
-	const parsedPostID = C.NUMBER.safeParse(req.params.id);
-	const parsedUserID = C.NUMBER.safeParse(req.headers["userID"]);
+	const parsedPostID = NUMBER.safeParse(req.params.id);
+	const parsedUserID = NUMBER.safeParse(req.headers["userID"]);
 
 	if (parsedPostID.error) {
 		log.warn(parsedPostID.error);
@@ -98,8 +98,8 @@ export async function unUpvotePost(req: Request, res: Response) {
 	let postID, userID;
 
 	try {
-		postID = C.NUMBER.parse(req.params.id);
-		userID = C.NUMBER.parse(req.headers["userID"]);
+		postID = NUMBER.parse(req.params.id);
+		userID = NUMBER.parse(req.headers["userID"]);
 	} catch (e) {
 		log.warn(e);
 		return ResponseBuilder.BadRequest(res, e);
@@ -107,11 +107,11 @@ export async function unUpvotePost(req: Request, res: Response) {
 
 	try {
 		const user = await UserRepository.findOne({
-			where: { id: userID },
+			where: {id: userID},
 		});
 
 		const existedPost = await PostRepository.findOne({
-			where: { id: postID },
+			where: {id: postID},
 			relations: {
 				user: true,
 			},
@@ -136,7 +136,7 @@ export async function unUpvotePost(req: Request, res: Response) {
 		await PostRepository.save(existedPost);
 		return ResponseBuilder.Ok(
 			res,
-			POST_SCHEMA.parse(existedPost)
+			existedPost
 		);
 	} catch (e) {
 		log.error(e);

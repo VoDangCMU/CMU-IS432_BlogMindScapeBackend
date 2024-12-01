@@ -1,8 +1,9 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import User from "@models/User";
+import User from "./User";
 
+export const UserSessionTableName = "user_session";
 
-@Entity()
+@Entity({name: UserSessionTableName})
 export class UserSession {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
