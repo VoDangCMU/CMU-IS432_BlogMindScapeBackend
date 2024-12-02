@@ -31,8 +31,6 @@ export async function getPostByID(req: Request, res: Response) {
 }
 
 export async function getPostComments(req: Request, res: Response) {
-	let postID;
-
 	const parsedPostId = NUMBER.safeParse(req.params.postId);
 
 	if (parsedPostId.error) {
@@ -44,7 +42,7 @@ export async function getPostComments(req: Request, res: Response) {
 	const postId = parsedPostId.data;
 
 	CommentRepository.find({
-		where: {post: {id: postID}},
+		where: {post: {id: postId}},
 		relations: {user: true}
 	})
 		.then(comments => {
