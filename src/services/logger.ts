@@ -8,6 +8,7 @@ const prefix = {
 	warn: chalk.bgYellow.bold.black(" WARN "),
 	error: chalk.bgRed.bold.blue(" ERROR "),
 	status: chalk.bgMagenta.bold.white(" STATUS "),
+	socket: chalk.bgWhite.bold.black(" MESSAGE "),
 };
 
 const log = {
@@ -28,6 +29,11 @@ const log = {
 
 	status(...data: any[]) {
 		console.log(prefix['status'], ...data);
+	},
+
+	socket(...data: any[]) {
+		if (env.ENV === "production" || env.ENV === 'staging') return;
+		console.log(prefix['socket'], ...data);
 	}
 }
 

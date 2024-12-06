@@ -19,8 +19,12 @@ export function signToken(data: ITokenPayload): string {
 }
 
 export function decodeToken(token: string): ITokenPayload | null {
-	const data: any = jwt.decode(token);
-
-	if (data) return data as ITokenPayload;
-	return null;
+	try {
+		jwt.verify(token, env.TOKEN_SECRET)
+		const data: any = jwt.decode(token);
+		if (data) return data as ITokenPayload;
+		return null;
+	} catch (e) {
+		return null;
+	}
 }
