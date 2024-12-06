@@ -1,4 +1,5 @@
 import express from "express";
+import { createServer } from "http";
 import path from "path";
 import fs from "fs";
 import cors, {CorsOptions} from "cors";
@@ -9,6 +10,8 @@ import env from "./env";
 import notfound from "./routes/[404]";
 import log from "@services/logger";
 import morgan from "morgan";
+import {loadSocket} from "@root/socket/socket";
+
 
 log.status("Starting Application");
 log.status("Configuring routes");
@@ -57,9 +60,17 @@ AppDataSource.initialize().then(() => {
 	// 404
 	app.use("*", notfound);
 
-	app.listen(env.APPLICATION_PORT, () => {
+	// app.listen(env.APPLICATION_PORT, () => {
+	// 	log.status(
+	// 		`Application Start at PORT ${env.APPLICATION_PORT}\tENV=${env.ENV}\tURL=http://127.0.0.1:${env.APPLICATION_PORT}`
+	// 	);
+	// });
+
+	let httpServer = createServer(app);
+	httpServer = loadSocket(httpServer);
+	httpServer.listen(env.APPLICATION_PORT, () => {
 		log.status(
 			`Application Start at PORT ${env.APPLICATION_PORT}\tENV=${env.ENV}\tURL=http://127.0.0.1:${env.APPLICATION_PORT}`
 		);
-	});
+	})
 });
