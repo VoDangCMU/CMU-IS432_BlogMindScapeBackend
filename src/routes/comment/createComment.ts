@@ -8,6 +8,8 @@ import STRING from "@database/DataSchema/STRING";
 import UserRepository from "@database/repo/UserRepository";
 import PostRepository from "@database/repo/PostRepository";
 import CommentRepository from "@database/repo/CommentRepository";
+import {createNotification} from "@database/repo/NotificationRepository";
+import {emitNotification} from "@root/socket/client";
 
 const CommentCreationDataParser = z.object({
 	body: STRING,
@@ -30,6 +32,9 @@ export default async function createComment(req: Request, res: Response) {
 		const user = await UserRepository.findOne({where: {id: userID}});
 		const post = await PostRepository.findOne({
 			where: {id: reqBody.postID},
+			relations: {
+				user: true
+			}
 		});
 
 		if (!user) return ResponseBuilder.NotFound(res, "USER_NOT_FOUND");
@@ -45,6 +50,9 @@ export default async function createComment(req: Request, res: Response) {
 		await CommentRepository.save(createdComment);
 
 		log.info(createdComment);
+
+		await createNotification("comment", post.user, user)
+		emitNotification(post.user);
 
 		return ResponseBuilder.Ok(
 			res,

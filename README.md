@@ -77,3 +77,28 @@ It's safe to use force operator (!).
 ### Document
 You can find OpenAPI v3 Specs [here](https://app.box.com/s/79ux7nm23iontdz9gh6xupgdpvm74xya).  
 Import this file to Postman, Apidog,... to explore api document.
+
+### Socket.io
+```js
+import socketio from 'socket.io-client';
+
+const io = socketio('<URL>', {
+	auth: {
+		token: "<Access Token>"
+	}
+});
+```
+
+You can subscribe to notification in `notification` channel. eg:
+```js
+io.on("notification", (err) => {
+  console.log(err.message); // not authorized
+});
+```
+
+Or simply subscribe to all event:
+```js
+io.onAny((eventName, data) => {
+	console.log(eventName, " - ", data);
+});
+```
