@@ -2,16 +2,21 @@ import {Request, Response} from 'express'
 import log from "@services/logger";
 import ResponseBuilder from "@services/responseBuilder";
 import UpvoteRepository from "@database/repo/UpvoteRepository";
+import Upvote from "@models/Upvote";
 
 export default async function getUserUpvotes(req: Request, res: Response) {
-    const userID = parseInt(req.headers.userID!.toString());
 
     try {
         const userUpVotes = await UpvoteRepository.find({
-            where: {user: {id: Number(userID)}},
-            relations: {post: true}
+            relations: {post: true},
         })
-        return ResponseBuilder.Ok(res, userUpVotes);
+
+        const result = userUpVotes.reduce((acc: any, curr: Upvote) => {
+            return [...acc, curr.post];
+        }, []);
+
+        log.info(result);
+        return ResponseBuilder.Ok(res, result);
     } catch (e) {
         log.error(e);
         return ResponseBuilder.InternalServerError(res);

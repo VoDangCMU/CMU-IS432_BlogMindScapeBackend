@@ -29,8 +29,8 @@ post.get("/downvotes/:postId", getPostDownvotes);
 post.get("/status/upvote/:id", isUpvoted);
 post.get("/status/downvote/:id", isDownvoted);
 post.get("/status/vote/:id", getVoteStatus);
-post.get("/userUpvotes/uu", getUserUpvotes);
-post.get("/userDownvotes/ud", getUserDownvotes)
+post.get("/user/current/userUpvotes", getUserUpvotes);
+post.get("/user/current/userDownvotes", getUserDownvotes)
 
 export default post;
 module.exports = post;
