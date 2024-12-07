@@ -73,6 +73,10 @@ export async function downvotePost(req: Request, res: Response) {
 		existedPost.downvote++;
 
 		await PostRepository.save(existedPost);
+
+		await createNotification("downvote", existedPost.user, user)
+		emitNotification(existedPost.user);
+
 		return ResponseBuilder.Ok(res, existedPost);
 	} catch (e) {
 		log.error(e);
