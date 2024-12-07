@@ -9,6 +9,8 @@ import MessageCodes from "@root/messageCodes";
 import NUMBER from "@database/DataSchema/NUMBER";
 import STRING from "@database/DataSchema/STRING";
 import {z} from "zod";
+import {emitNotification} from "@root/socket/client";
+import {createNotification} from "@database/repo/NotificationRepository";
 
 const PostUpdateDataParser = z.object({
 	id: NUMBER,
@@ -71,6 +73,10 @@ export async function downvotePost(req: Request, res: Response) {
 		existedPost.downvote++;
 
 		await PostRepository.save(existedPost);
+
+		await createNotification("downvote", existedPost.user, user)
+		emitNotification(existedPost.user);
+
 		return ResponseBuilder.Ok(res, existedPost);
 	} catch (e) {
 		log.error(e);
@@ -167,6 +173,10 @@ export async function upvotePost(req: Request, res: Response) {
 		existedPost.upvote++;
 
 		await PostRepository.save(existedPost);
+
+		await createNotification("upvote", existedPost.user, user)
+		emitNotification(existedPost.user);
+
 		return ResponseBuilder.Ok(
 			res,
 			existedPost
