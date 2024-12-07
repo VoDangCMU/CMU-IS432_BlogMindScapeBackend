@@ -6,6 +6,8 @@ import {getPostByID, getPostComments, getPostDownvotes, getPostUpvotes} from "@r
 import {downvotePost, updatePost, upvotePost} from "@routes/post/updatePost";
 import {_deletePost, unDownvotePost, unUpvotePost} from "@routes/post/deletePost";
 import {getVoteStatus, isDownvoted, isUpvoted} from "@routes/post/postStatus";
+import getUserUpvotes from "@routes/user/userUpvotes";
+import getUserDownvotes from "@routes/user/userDownvotes";
 
 const post = Router();
 
