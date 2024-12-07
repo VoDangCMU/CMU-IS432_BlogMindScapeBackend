@@ -6,8 +6,8 @@ import {getPostByID, getPostComments, getPostDownvotes, getPostUpvotes} from "@r
 import {downvotePost, updatePost, upvotePost} from "@routes/post/updatePost";
 import {_deletePost, unDownvotePost, unUpvotePost} from "@routes/post/deletePost";
 import {getVoteStatus, isDownvoted, isUpvoted} from "@routes/post/postStatus";
-import getUserUpvotes from "@routes/post/userUpvotes";
-import getUserDownvotes from "@routes/post/userDownvotes";
+import getUserUpvotes from "@routes/user/userUpvotes";
+import getUserDownvotes from "@routes/user/userDownvotes";
 
 const post = Router();
 
@@ -29,8 +29,6 @@ post.get("/downvotes/:postId", getPostDownvotes);
 post.get("/status/upvote/:id", isUpvoted);
 post.get("/status/downvote/:id", isDownvoted);
 post.get("/status/vote/:id", getVoteStatus);
-post.get("/user/current/userUpvotes", getUserUpvotes);
-post.get("/user/current/userDownvotes", getUserDownvotes)
 
 export default post;
 module.exports = post;
