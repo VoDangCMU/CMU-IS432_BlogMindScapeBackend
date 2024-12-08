@@ -11,8 +11,6 @@ import getUserDownvotes from "@routes/user/userDownvotes";
 
 const post = Router();
 
-post.use(isAuth)
-
 post.get("/:id", getPostByID);
 post.post("/", createPost);
 post.delete("/:id", _deletePost);
