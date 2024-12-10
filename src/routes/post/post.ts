@@ -2,12 +2,10 @@ import {Router} from "express";
 
 import createPost from "./createPost";
 import {isAuth} from "@root/middlewares/isAuth";
-import {getPostByID, getPostComments, getPostDownvotes, getPostUpvotes} from "@routes/post/getPost";
+import {getPostByID, getPostComments, getPostDownvotes, getPostUpvotes, getUserPosts} from "@routes/post/getPost";
 import {downvotePost, updatePost, upvotePost} from "@routes/post/updatePost";
 import {_deletePost, unDownvotePost, unUpvotePost} from "@routes/post/deletePost";
 import {getVoteStatus, isDownvoted, isUpvoted} from "@routes/post/postStatus";
-import getUserUpvotes from "@routes/user/userUpvotes";
-import getUserDownvotes from "@routes/user/userDownvotes";
 
 const post = Router();
 
@@ -30,5 +28,6 @@ post.get("/status/upvote/:id", isUpvoted);
 post.get("/status/downvote/:id", isDownvoted);
 post.get("/status/vote/:id", getVoteStatus);
 
-export default post;
+post.get("/user/:id", getUserPosts);
+
 module.exports = post;

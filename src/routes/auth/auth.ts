@@ -9,5 +9,4 @@ const auth = Router();
 auth.post("/register", register);
 auth.post("/login", login);
 
-export default auth;
 module.exports = auth;

@@ -91,8 +91,8 @@ const io = socketio('<URL>', {
 
 You can subscribe to notification in `notification` channel. eg:
 ```js
-io.on("notification", (err) => {
-  console.log(err.message); // not authorized
+io.on("notification", (data) => {
+  console.log(data); // not authorized
 });
 ```
 

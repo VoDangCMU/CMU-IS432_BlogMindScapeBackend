@@ -11,5 +11,4 @@ newsfeed.get("/top30", getTop30Post);
 newsfeed.get("/allPosts/:page", getAllPostsByPage);
 newsfeed.get("/allPosts", getAllPosts);
 
-export default newsfeed;
 module.exports = newsfeed;
