@@ -117,3 +117,23 @@ export async function getPostUpvotes(req: Request, res: Response) {
 			return ResponseBuilder.InternalServerError(res);
 		})
 }
+
+export async function getUserPosts(req: Request, res: Response) {
+	const userID = parseInt(req.params.id!.toString(), 10);
+
+	PostRepository.find({
+		where: {
+			user: {id: userID}
+		},
+		relations: {
+			user: true
+		}
+	})
+		.then(data => {
+			return ResponseBuilder.Ok(res, data)
+		})
+		.catch(err => {
+			log.error(err);
+			return ResponseBuilder.InternalServerError(res);
+		})
+}

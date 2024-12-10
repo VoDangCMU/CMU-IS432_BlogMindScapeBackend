@@ -7,5 +7,4 @@ const db = Router();
 db.use(isNotProduction)
 db.post("/purge", purge);
 
-export default db;
 module.exports = db;
