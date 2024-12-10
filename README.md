@@ -83,7 +83,7 @@ Import this file to Postman, Apidog,... to explore api document.
 import socketio from 'socket.io-client';
 
 const io = socketio('<URL>', {
-	auth: {
+	index: {
 		token: "<Access Token>"
 	}
 });
