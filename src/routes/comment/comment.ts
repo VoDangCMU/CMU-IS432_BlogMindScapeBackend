@@ -12,4 +12,3 @@ comment.put("/", updateComment);
 comment.delete("/:id", deleteComment);
 
 module.exports = comment;
-export default comment;

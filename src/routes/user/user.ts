@@ -17,5 +17,4 @@ user.get("/current/userUpvotes", getUserUpvotes);
 user.get("/current/userDownvotes", getUserDownvotes);
 user.get('/current/me', me)
 
-export default user;
 module.exports = user;

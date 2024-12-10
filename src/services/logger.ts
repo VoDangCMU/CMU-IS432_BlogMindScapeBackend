@@ -9,6 +9,7 @@ const prefix = {
 	error: chalk.bgRed.bold.blue(" ERROR "),
 	status: chalk.bgMagenta.bold.white(" STATUS "),
 	socket: chalk.bgWhite.bold.black(" MESSAGE "),
+	success: chalk.bgGreen.bold.white(" SUCCESS "),
 };
 
 const log = {
@@ -34,7 +35,11 @@ const log = {
 	socket(...data: any[]) {
 		if (env.ENV === "production" || env.ENV === 'staging') return;
 		console.log(prefix['socket'], ...data);
-	}
+	},
+
+	success(...data: any[]) {
+		console.log(prefix['success'], ...data);
+	},
 }
 
 export default log; 
