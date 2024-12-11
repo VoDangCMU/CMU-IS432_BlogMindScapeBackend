@@ -1,4 +1,4 @@
-import {decodeToken, ITokenPayload, signToken} from '@services/jwt';
+import { decodeToken, ITokenPayload, signToken } from '@services/jwt';
 
 test('Sign and Decode token', () => {
 	const payload: ITokenPayload = {
@@ -9,4 +9,4 @@ test('Sign and Decode token', () => {
 	const jwt = signToken(payload);
 	const decoded = decodeToken(jwt);
 	expect(decoded).toBe(payload);
-})
+});

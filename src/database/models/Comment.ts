@@ -1,32 +1,35 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-} from "typeorm";
-import Post from "./Post";
-import User from "./User";
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	ManyToOne,
+	CreateDateColumn,
+} from 'typeorm';
+import Post from './Post';
+import User from './User';
+import { AppDataSource } from '@database/DataSource';
 
-export const CommentTableName = "comment";
+export const CommentTableName = 'comment';
 
-@Entity({name: CommentTableName})
-export default class Comment {
-  @PrimaryGeneratedColumn({type: "bigint"})
-  id: number;
+@Entity({ name: CommentTableName })
+export class Comment {
+	@PrimaryGeneratedColumn({ type: 'bigint' })
+	id: number;
 
-  @Column()
-  body: string;
+	@Column()
+	body: string;
 
-  @Column({ nullable: true })
-  attachment: string;
+	@Column({ nullable: true })
+	attachment: string;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
-  user: User;
+	@ManyToOne(() => User, { onDelete: 'CASCADE' })
+	user: User;
 
-  @ManyToOne(() => Post, { onDelete: "CASCADE" })
-  post: Post;
+	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
+	post: Post;
 
-  @CreateDateColumn()
-  createdAt: Date;
+	@CreateDateColumn()
+	createdAt: Date;
 }
+
+export default Comment;

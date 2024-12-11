@@ -1,12 +1,17 @@
-import {Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import User from "./User";
-import Post from "./Post";
+import {
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
+import User from './User';
+import Post from './Post';
 
-export const UpvoteTableName = "upvote";
+export const UpvoteTableName = 'upvote';
 
-@Entity({name: UpvoteTableName})
+@Entity({ name: UpvoteTableName })
 export default class Upvote {
-	@PrimaryGeneratedColumn({type: "bigint"})
+	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number;
 
 	@ManyToOne(() => User, { onDelete: 'CASCADE' })
@@ -14,4 +19,7 @@ export default class Upvote {
 
 	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
 	post: Post;
+
+	@CreateDateColumn()
+	createdAt: Date;
 }

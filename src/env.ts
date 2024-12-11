@@ -1,7 +1,7 @@
-import {z} from "zod";
-import {config} from "dotenv";
-import STRING from "./database/DataSchema/STRING";
-import NUMBER from "./database/DataSchema/NUMBER";
+import { z } from 'zod';
+import { config } from 'dotenv';
+import STRING from './database/DataSchema/STRING';
+import NUMBER from './database/DataSchema/NUMBER';
 
 config();
 
@@ -16,12 +16,12 @@ const envSchema = z.object({
 	TOKEN_SECRET: STRING,
 	ENV: z
 		.union([
-			z.literal("development"),
-			z.literal("staging"),
-			z.literal("production"),
-			z.literal("testing"),
+			z.literal('development'),
+			z.literal('staging'),
+			z.literal('production'),
+			z.literal('testing'),
 		])
-		.default("development"),
+		.default('development'),
 	DB_HOST: STRING.ip(),
 	DB_PORT: NUMBER,
 	DB_USERNAME: STRING,

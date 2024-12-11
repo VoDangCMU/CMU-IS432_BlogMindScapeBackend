@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-import env from "../env";
+import env from '../env';
 
 export interface ITokenPayload {
 	userID: string;
@@ -8,8 +8,8 @@ export interface ITokenPayload {
 }
 
 const tokenOptions: jwt.SignOptions = {
-	algorithm: "HS256",
-	expiresIn: "7d",
+	algorithm: 'HS256',
+	expiresIn: '7d',
 };
 
 export function signToken(data: ITokenPayload): string {
@@ -20,7 +20,7 @@ export function signToken(data: ITokenPayload): string {
 
 export function decodeToken(token: string): ITokenPayload | null {
 	try {
-		jwt.verify(token, env.TOKEN_SECRET)
+		jwt.verify(token, env.TOKEN_SECRET);
 		const data: any = jwt.decode(token);
 		if (data) return data as ITokenPayload;
 		return null;

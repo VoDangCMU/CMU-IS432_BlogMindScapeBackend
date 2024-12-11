@@ -1,6 +1,6 @@
-import {compareSync, hashSync} from "bcrypt";
+import { compareSync, hashSync } from 'bcrypt';
 
-import env from "../env";
+import env from '../env';
 
 export function hash(x: string): string {
 	return hashSync(x, env.SALT_ROUND);

@@ -1,29 +1,29 @@
-import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm"
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-export const UserTableName = "user";
+export const UserTableName = 'user';
 
-@Entity({name: UserTableName})
+@Entity({ name: UserTableName })
 @Unique('UNIQUE_USERNAME', ['username'])
 @Unique('UNIQUE_MAIL', ['mail'])
 export default class User {
-	@PrimaryGeneratedColumn({type: "bigint"})
-	id: number
+	@PrimaryGeneratedColumn({ type: 'bigint' })
+	id: number;
 
 	@Column()
-	username: string
+	username: string;
 
 	@Column()
-	mail: string
+	mail: string;
 
 	@Column()
-	fullname: string
+	fullname: string;
 
 	@Column()
-	dateOfBirth: Date
+	dateOfBirth: Date;
 
-	@Column({select: false})
-	password: string
+	@Column({ select: false })
+	password: string;
 
-	@Column({default: 'blank-avatar.jpg'})
+	@Column({ default: 'blank-avatar.jpg' })
 	avatar: string;
 }
