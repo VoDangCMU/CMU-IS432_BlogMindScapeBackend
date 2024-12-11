@@ -1,4 +1,4 @@
-import {Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import User from "./User";
 import Post from "./Post";
 
@@ -14,4 +14,7 @@ export default class Downvote {
 
 	@ManyToOne(() => Post, {onDelete: 'CASCADE'})
 	post: Post;
+
+	@CreateDateColumn()
+	createdAt: Date;
 }

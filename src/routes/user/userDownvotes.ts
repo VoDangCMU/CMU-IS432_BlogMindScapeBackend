@@ -7,7 +7,8 @@ import Downvote from "@models/Downvote";
 export default async function getUserDownvotes(req: Request, res: Response) {
     try {
         const userDownvotes = await DownvoteRepository.find({
-            relations: {post: true}
+            relations: {post: true},
+            order: {createdAt: "DESC"}
         });
 
         const result = userDownvotes.reduce((acc: any, curr: Downvote) => {

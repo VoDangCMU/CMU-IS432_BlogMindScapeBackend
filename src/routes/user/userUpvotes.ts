@@ -9,6 +9,7 @@ export default async function getUserUpvotes(req: Request, res: Response) {
     try {
         const userUpVotes = await UpvoteRepository.find({
             relations: {post: true},
+            order: {createdAt: "DESC"}
         })
 
         const result = userUpVotes.reduce((acc: any, curr: Upvote) => {
