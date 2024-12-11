@@ -1,15 +1,22 @@
-import {Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from "typeorm";
-import User from "./User";
-import Comment from "./Comment";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
+import User from './User';
+import Comment from './Comment';
 
-export const PostTableName = "post";
+export const PostTableName = 'post';
 
-@Entity({name: PostTableName})
+@Entity({ name: PostTableName })
 export default class Post {
-	@PrimaryGeneratedColumn({type: "bigint"})
+	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number;
 
-	@ManyToOne(() => User, {onDelete: "CASCADE"})
+	@ManyToOne(() => User, { onDelete: 'CASCADE' })
 	user: User;
 
 	@Column()
@@ -18,13 +25,13 @@ export default class Post {
 	@Column()
 	body: string;
 
-	@Column({default: 0})
+	@Column({ default: 0 })
 	upvote: number;
 
-	@Column({default: 0})
+	@Column({ default: 0 })
 	downvote: number;
 
-	@OneToMany(() => Comment, (comment) => comment.post, {onDelete: "CASCADE"})
+	@OneToMany(() => Comment, (comment) => comment.post, { onDelete: 'CASCADE' })
 	comments: Array<Comment>;
 
 	@CreateDateColumn()

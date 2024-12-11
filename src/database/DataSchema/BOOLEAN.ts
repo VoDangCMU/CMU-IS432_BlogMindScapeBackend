@@ -1,7 +1,7 @@
-import {z} from "zod";
+import { z } from 'zod';
 
 export const BOOLEAN = z
-	.enum(["true", "false"])
-	.transform((value) => value === "true");
+	.enum(['true', 'false'])
+	.transform((value) => value === 'true');
 
 export default BOOLEAN;
