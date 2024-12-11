@@ -54,20 +54,14 @@ app.get("/hello", (req, res) => {
 	res.json({message: "world"});
 }); // This endpoint only for health checking
 
-const routes = glob.sync("./src/routes/**/*.{js,ts}");
 
-for (const routePath of routes) {
-	log.status("Checking file " + routePath);
-	const routerName = routePath.split(/[\\/]/g).pop()!.replace(/\.(ts|js)\b/g, '');
-	const router: Router = require(routePath);
-	log.status("Checking if this file is a router...")
-	if (router.stack) {
-		log.status("Registering endpoint /" + routerName);
-		app.use(`/${routerName}`, router);
-		log.success("Registered endpoint /" + routerName);
-	} else {
-		log.warn("Not a express router. Skipping...")
-	}
+const routesPath = path.resolve(__dirname, "routes");
+const routes: Array<string> = fs.readdirSync(routesPath)
+	.filter((e) => !(e.includes(".js") || e.includes(".ts")));
+
+for (const router of routes) {
+	const req_router = require(`./routes/${router}/index`);
+	app.use(`/${router}`, req_router);
 }
 
 // 404
