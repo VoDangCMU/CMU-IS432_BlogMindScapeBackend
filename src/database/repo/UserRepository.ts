@@ -12,6 +12,7 @@ export async function createUser(params: any) {
 	user.mail = params.mail;
 	user.username = params.username;
 	user.password = hash(params.password);
+	user.avatar = params.avatar;
 
 	await UserRepository.save(user);
 
