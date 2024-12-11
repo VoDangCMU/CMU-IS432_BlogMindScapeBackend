@@ -23,4 +23,7 @@ export default class User {
 
 	@Column({select: false})
 	password: string
+
+	@Column({default: 'blank-avatar.jpg'})
+	avatar: string;
 }

@@ -12,7 +12,8 @@ const RegisterDataParser = z.object({
 	mail: STRING,
 	password: STRING,
 	dateOfBirth: DATE,
-	fullname: STRING
+	fullname: STRING,
+	avatar: STRING.optional(),
 })
 
 export default async function (req: Request, res: Response) {
