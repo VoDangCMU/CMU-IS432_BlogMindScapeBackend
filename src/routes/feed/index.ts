@@ -6,7 +6,6 @@ import getAllPosts from "@routes/feed/allPosts";
 
 const newsfeed = Router();
 
-newsfeed.use(isAuth)
 newsfeed.get("/top30", getTop30Post);
 newsfeed.get("/allPosts/:page", getAllPostsByPage);
 newsfeed.get("/allPosts", getAllPosts);

@@ -13,14 +13,14 @@ import updateAvatar from "@routes/user/updateAvatar";
 const user = Router();
 
 user.use(isAuth);
-user.post('/:id', logout);
+user.post('/:id', isAuth, logout);
 user.get('/:id', getUserByID);
-user.post('/logout', logout);
-user.get("/current/userUpvotes", getUserUpvotes);
-user.get("/current/userDownvotes", getUserDownvotes);
-user.get('/current/me', me)
-user.get('/current/posts', userPosts);
+user.post('/logout', isAuth, logout);
+user.get("/current/userUpvotes", isAuth, getUserUpvotes);
+user.get("/current/userDownvotes", isAuth, getUserDownvotes);
+user.get('/current/me', isAuth, me)
+user.get('/current/posts', isAuth, userPosts);
 
-user.put("/updateAvatar", updateAvatar);
+user.put("/updateAvatar", isAuth, updateAvatar);
 
 module.exports = user;

@@ -9,24 +9,23 @@ import {getVoteStatus, isDownvoted, isUpvoted} from "@routes/post/postStatus";
 
 const post = Router();
 
-post.use(isAuth)
 
 post.get("/:id", getPostByID);
-post.post("/", createPost);
-post.delete("/:id", _deletePost);
-post.put("/", updatePost);
-post.put("/upvote/:id", upvotePost);
-post.put("/downvote/:id", downvotePost);
-post.delete("/upvote/:id", unUpvotePost);
-post.delete("/downvote/:id", unDownvotePost);
+post.post("/", isAuth, createPost);
+post.delete("/:id", isAuth, _deletePost);
+post.put("/", isAuth, updatePost);
+post.put("/upvote/:id", isAuth, upvotePost);
+post.put("/downvote/:id", isAuth, downvotePost);
+post.delete("/upvote/:id", isAuth, unUpvotePost);
+post.delete("/downvote/:id", isAuth, unDownvotePost);
 
-post.get("/comments/:postId", getPostComments);
+post.get("/comments/:postId", isAuth, getPostComments);
 post.get("/upvotes/:postId", getPostUpvotes);
 post.get("/downvotes/:postId", getPostDownvotes);
 
-post.get("/status/upvote/:id", isUpvoted);
-post.get("/status/downvote/:id", isDownvoted);
-post.get("/status/vote/:id", getVoteStatus);
+post.get("/status/upvote/:id", isAuth, isUpvoted);
+post.get("/status/downvote/:id", isAuth, isDownvoted);
+post.get("/status/vote/:id", isAuth, getVoteStatus);
 
 post.get("/user/:id", getUserPosts);
 
