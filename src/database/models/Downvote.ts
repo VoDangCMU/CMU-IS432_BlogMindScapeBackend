@@ -1,18 +1,23 @@
-import {CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import User from "./User";
-import Post from "./Post";
+import {
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
+import User from './User';
+import Post from './Post';
 
-export const DownvoteTableName = "downvote";
+export const DownvoteTableName = 'downvote';
 
-@Entity({name: DownvoteTableName})
+@Entity({ name: DownvoteTableName })
 export default class Downvote {
-	@PrimaryGeneratedColumn({type: "bigint"})
+	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number;
 
-	@ManyToOne(() => User, {onDelete: 'CASCADE'})
+	@ManyToOne(() => User, { onDelete: 'CASCADE' })
 	user: User;
 
-	@ManyToOne(() => Post, {onDelete: 'CASCADE'})
+	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
 	post: Post;
 
 	@CreateDateColumn()

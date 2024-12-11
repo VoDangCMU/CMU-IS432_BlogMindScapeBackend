@@ -1,29 +1,29 @@
-import {Response} from "express";
+import { Response } from 'express';
 
-function NotFound(res: Response, detail: any = "") {
+function NotFound(res: Response, detail: any = '') {
 	return res.status(404).json({
-		message: "The content you requested is missing.",
+		message: 'The content you requested is missing.',
 		detail,
 	});
 }
 
-function BadRequest(res: Response, detail: any = "") {
+function BadRequest(res: Response, detail: any = '') {
 	return res.status(400).json({
-		message: "Bad Request.",
+		message: 'Bad Request.',
 		detail,
 	});
 }
 
-function Forbidden(res: Response, detail: any = "") {
+function Forbidden(res: Response, detail: any = '') {
 	return res.status(403).json({
-		message: "You do not have permission to access to this resource.",
+		message: 'You do not have permission to access to this resource.',
 		detail,
 	});
 }
 
-function Unauthorize(res: Response, detail: any = "") {
+function Unauthorize(res: Response, detail: any = '') {
 	return res.status(401).json({
-		message: "Unauthorize.",
+		message: 'Unauthorize.',
 		detail,
 	});
 }
@@ -34,10 +34,10 @@ function Ok(res: Response, data: Object = {}) {
 
 function InternalServerError(
 	res: Response,
-	detail: any = "Check server logs for further information"
+	detail: any = 'Check server logs for further information',
 ) {
 	return res.status(500).json({
-		message: "Internal Server Error",
+		message: 'Internal Server Error',
 		detail,
 	});
 }

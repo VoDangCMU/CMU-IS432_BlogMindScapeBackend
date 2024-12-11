@@ -1,14 +1,14 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import User from "./User";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import User from './User';
 
-export const UserSessionTableName = "user_session";
+export const UserSessionTableName = 'user_session';
 
-@Entity({name: UserSessionTableName})
+@Entity({ name: UserSessionTableName })
 export class UserSession {
-	@PrimaryGeneratedColumn("uuid")
+	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@ManyToOne(() => User, {onDelete: "CASCADE"})
+	@ManyToOne(() => User, { onDelete: 'CASCADE' })
 	user: User;
 
 	@Column()
