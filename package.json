@@ -33,6 +33,7 @@
 		"nodemon": "^3.1.4",
 		"pg": "^8.12.0",
 		"require-json5": "^1.3.0",
+		"rimraf": "^6.0.1",
 		"socket.io": "^4.8.1",
 		"socket.io-client": "^4.8.1",
 		"supertest": "^7.0.0",
@@ -44,12 +45,13 @@
 		"zod": "^3.23.8"
 	},
 	"scripts": {
+		"clean": "rimraf ./dist",
 		"format": "prettier . --write",
-		"dev": "nodemon -e ts,js --exec ts-node -r tsconfig-paths/register ./src/index.ts",
+		"dev": "nodemon",
 		"start": "node ./dist/src/index.js",
 		"test": "cross-env ENV=testing jest",
 		"test-server": "cross-env ENV=testing ts-node -r tsconfig-paths/register ./src/index.ts",
-		"build": "tsc --build tsconfig.json && tsc-alias",
+		"build": "yarn run clean && tsc --build tsconfig.json && tsc-alias",
 		"typeorm": "typeorm-ts-node-commonjs",
 		"migration:create": "ts-node ./src/runner/migration_create.ts",
 		"migration:run": "typeorm-ts-node-commonjs migration:run -d ./src/database/DataSource.ts",
