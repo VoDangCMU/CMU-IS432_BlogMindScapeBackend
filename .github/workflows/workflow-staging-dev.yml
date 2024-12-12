@@ -1,6 +1,5 @@
-name: Deploy Staging App
+name: Staging Workflow
 
-# Trigger this workflow on pushes to the specified branch
 on:
   push:
     branches:
