@@ -22,7 +22,7 @@ const envSchema = z.object({
 			z.literal('testing'),
 		])
 		.default('development'),
-	DB_HOST: STRING.ip(),
+	DB_HOST: STRING,
 	DB_PORT: NUMBER,
 	DB_USERNAME: STRING,
 	DB_PASSWORD: STRING,
